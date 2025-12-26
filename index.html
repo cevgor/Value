@@ -181,6 +181,27 @@
             font-size: 24px;
         }
 
+        .email-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            margin-top: 8px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .email-status.verified {
+            color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .email-status.unverified {
+            color: var(--accent);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
         .nav-item {
             display: flex;
             align-items: center;
@@ -557,7 +578,7 @@
             padding: 16px 20px;
             color: white;
             font-size: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             transition: all 0.3s;
             outline: none;
         }
@@ -565,6 +586,19 @@
         .neon-input:focus {
             border-color: var(--primary);
             box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .input-error {
+            border-color: var(--danger) !important;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3) !important;
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 12px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
         }
 
         .auth-tabs {
@@ -635,6 +669,11 @@
             box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
         }
 
+        .auth-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         /* Уведомления */
         .notification {
             position: fixed;
@@ -686,6 +725,331 @@
         .notification.error .notification-icon {
             background: rgba(239, 68, 68, 0.2);
             color: var(--danger);
+        }
+
+        /* Модальное окно верификации */
+        .verification-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .verification-modal.show {
+            display: flex;
+        }
+
+        .verification-content {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius);
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .verification-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 36px;
+            animation: pulse 2s infinite;
+        }
+
+        .verification-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #818cf8, #c4b5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .verification-text {
+            color: var(--gray);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .verification-code {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .code-input {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            color: white;
+            font-size: 24px;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .code-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .resend-link {
+            color: var(--primary-light);
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        .resend-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Модальное окно поиска друзей */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius);
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #818cf8, #c4b5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: white;
+        }
+
+        .search-container {
+            margin-bottom: 25px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            color: white;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .users-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s;
+            animation: slideInLeft 0.3s ease-out;
+        }
+
+        .user-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+            transform: translateX(5px);
+        }
+
+        .user-avatar-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .user-id {
+            font-size: 12px;
+            color: var(--gray);
+            font-family: monospace;
+        }
+
+        .user-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-dot.online {
+            background: var(--success);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        }
+
+        .status-dot.offline {
+            background: var(--gray);
+        }
+
+        .add-friend-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .add-friend-btn:hover {
+            background: var(--primary-light);
+            transform: scale(1.05);
+        }
+
+        .add-friend-btn.added {
+            background: var(--success);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+            font-size: 16px;
+        }
+
+        /* Список друзей в боковой панели */
+        .friends-list {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .friend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .friend-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .friend-item.active {
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .friend-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .friend-name {
+            font-size: 14px;
+            flex: 1;
         }
 
         /* Анимация появления частиц */
@@ -790,6 +1154,67 @@
         </div>
     </div>
 
+    <!-- Модальное окно верификации -->
+    <div class="verification-modal" id="verificationModal">
+        <div class="verification-content">
+            <div class="verification-icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <h2 class="verification-title">Подтвердите email</h2>
+            <p class="verification-text">
+                Мы отправили 6-значный код подтверждения на ваш email.
+                Введите его ниже для завершения регистрации.
+            </p>
+            
+            <div class="verification-code" id="verificationCode">
+                <input type="text" class="code-input" maxlength="1" data-index="0" onkeyup="moveToNext(this, 1)">
+                <input type="text" class="code-input" maxlength="1" data-index="1" onkeyup="moveToNext(this, 2)">
+                <input type="text" class="code-input" maxlength="1" data-index="2" onkeyup="moveToNext(this, 3)">
+                <input type="text" class="code-input" maxlength="1" data-index="3" onkeyup="moveToNext(this, 4)">
+                <input type="text" class="code-input" maxlength="1" data-index="4" onkeyup="moveToNext(this, 5)">
+                <input type="text" class="code-input" maxlength="1" data-index="5" onkeyup="verifyCode(this)">
+            </div>
+            
+            <button class="auth-btn" onclick="verifyEmail()" style="margin-top: 20px;">
+                <i class="fas fa-check"></i> Подтвердить
+            </button>
+            
+            <div style="margin-top: 20px;">
+                <a class="resend-link" onclick="resendVerificationCode()">
+                    <i class="fas fa-redo"></i> Отправить код повторно
+                </a>
+                <br>
+                <a class="resend-link" onclick="skipVerification()" style="font-size: 12px; opacity: 0.7;">
+                    Подтвердить позже
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно поиска друзей -->
+    <div class="modal-overlay" id="friendsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Поиск друзей</h2>
+                <button class="close-modal" onclick="closeFriendsModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" 
+                       class="search-input" 
+                       id="searchFriendsInput" 
+                       placeholder="Введите имя или ID пользователя..."
+                       onkeyup="searchFriends()">
+            </div>
+            
+            <div class="users-list" id="usersList">
+                <!-- Список пользователей будет загружен здесь -->
+            </div>
+        </div>
+    </div>
+
     <!-- Кнопка меню для мобильных -->
     <button class="sidebar-toggle" id="sidebarToggle" style="display: none;">
         <i class="fas fa-bars"></i>
@@ -814,16 +1239,41 @@
                     </div>
 
                     <form id="login-form" class="auth-form">
-                        <input type="text" class="neon-input" id="login-id" placeholder="Ваш уникальный ID" required>
+                        <input type="text" class="neon-input" id="login-id" placeholder="Ваш ID или Email" required>
+                        <div class="error-message" id="login-error"></div>
                         <input type="password" class="neon-input" id="login-password" placeholder="Пароль" required>
                         <button type="submit" class="auth-btn">
                             <i class="fas fa-sign-in-alt"></i> Войти в систему
                         </button>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <a href="#" onclick="showForgotPassword()" style="color: var(--primary-light); font-size: 14px; text-decoration: none;">
+                                Забыли пароль?
+                            </a>
+                        </div>
                     </form>
 
                     <form id="register-form" class="auth-form" style="display: none;">
                         <input type="text" class="neon-input" id="register-username" placeholder="Придумайте имя" required>
+                        <div class="error-message" id="username-error"></div>
+                        <input type="email" class="neon-input" id="register-email" placeholder="Ваш email" required>
+                        <div class="error-message" id="email-error"></div>
                         <input type="password" class="neon-input" id="register-password" placeholder="Создайте пароль" required>
+                        <div class="error-message" id="password-error"></div>
+                        <input type="password" class="neon-input" id="register-confirm-password" placeholder="Повторите пароль" required>
+                        <div class="error-message" id="confirm-password-error"></div>
+                        
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: var(--radius-sm); margin: 15px 0; font-size: 14px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <i class="fas fa-shield-alt" style="color: var(--primary);"></i>
+                                <span>Требования к паролю:</span>
+                            </div>
+                            <ul style="list-style: none; padding-left: 10px; color: var(--gray);">
+                                <li>• Минимум 8 символов</li>
+                                <li>• Хотя бы одна заглавная буква</li>
+                                <li>• Хотя бы одна цифра</li>
+                            </ul>
+                        </div>
+                        
                         <button type="submit" class="auth-btn">
                             <i class="fas fa-user-plus"></i> Создать аккаунт
                         </button>
@@ -852,22 +1302,26 @@
                     <div class="user-id" style="font-size: 12px; color: var(--gray); margin-top: 5px;">
                         ID: <span id="current-user-id">------</span>
                     </div>
+                    <div class="email-status" id="email-status">
+                        <i class="fas fa-envelope"></i>
+                        <span id="email-text">Email не подтвержден</span>
+                    </div>
                 </div>
 
                 <div class="nav">
                     <div class="nav-item active" onclick="switchChat('general')">
                         <i class="fas fa-comments"></i>
                         <span>Общий чат</span>
-                        <span class="nav-badge" id="general-badge">3</span>
+                        <span class="nav-badge" id="general-badge">0</span>
                     </div>
-                    <div class="nav-item" onclick="switchChat('private')">
-                        <i class="fas fa-user-friends"></i>
-                        <span>Личные сообщения</span>
-                        <span class="nav-badge" id="pm-badge">1</span>
+                    <div class="nav-item" onclick="openFriendsModal()">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Найти друзей</span>
                     </div>
                     <div class="nav-item" onclick="showContacts()">
                         <i class="fas fa-users"></i>
-                        <span>Контакты</span>
+                        <span>Мои друзья</span>
+                        <span class="nav-badge" id="friends-badge">0</span>
                     </div>
                     <div class="nav-item" onclick="showSettings()">
                         <i class="fas fa-cog"></i>
@@ -877,6 +1331,11 @@
                         <i class="fas fa-user-cog"></i>
                         <span>Профиль</span>
                     </div>
+                </div>
+
+                <!-- Список друзей -->
+                <div class="friends-list" id="friendsList">
+                    <!-- Друзья будут загружены здесь -->
                 </div>
 
                 <div style="margin-top: auto; padding-top: 20px;">
@@ -895,7 +1354,7 @@
                     <div>
                         <h2 class="chat-title" id="chat-title">Общий чат</h2>
                         <div style="font-size: 14px; color: var(--gray); margin-top: 5px;">
-                            <span id="user-count">5</span> пользователей онлайн
+                            <span id="user-count">0</span> пользователей онлайн
                         </div>
                     </div>
                     <div class="online-indicator">
@@ -909,7 +1368,7 @@
                 <!-- Сообщения загружаются здесь -->
                 <div class="message received">
                     <div class="message-bubble">
-                        Добро пожаловать в VaultChat Pro! Здесь ваши сообщения защищены современным шифрованием.
+                        Добро пожаловать в VaultChat Pro! Все данные сохраняются между сессиями.
                     </div>
                     <div class="message-info">
                         <span>Система</span>
@@ -955,27 +1414,26 @@
             users: [],
             currentUser: null,
             messages: [],
+            friends: [],
             typingUsers: new Set(),
             soundEnabled: true,
             particles: [],
             currentChat: 'general',
-
-            // Звуковые эффекты (base64 короткие звуки)
-            sounds: {
-                send: 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAZGF0YQ',
-                receive: 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAZGF0YQ',
-                notification: 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAZGF0YQ'
-            },
+            currentFriend: null,
+            verificationCode: '',
+            pendingVerification: null,
 
             init() {
                 this.createParticles();
                 this.loadData();
                 this.setupEventListeners();
-                this.showAuthScreen();
                 
-                // Создание демо-пользователей при первом запуске
-                if (this.users.length === 0) {
-                    this.createDemoUsers();
+                // Проверяем, есть ли сохраненный пользователь для автоматического входа
+                const lastUserId = localStorage.getItem('vaultchat_last_user');
+                if (lastUserId) {
+                    this.tryAutoLogin(lastUserId);
+                } else {
+                    this.showAuthScreen();
                 }
                 
                 // Запуск обновления онлайн статуса
@@ -1010,68 +1468,112 @@
                 setTimeout(() => this.animateParticles(), 15000);
             },
 
+            // ФИКС: Правильная загрузка данных
             loadData() {
                 try {
+                    // Загружаем пользователей
                     const usersData = localStorage.getItem('vaultchat_pro_users');
-                    const messagesData = localStorage.getItem('vaultchat_pro_messages');
-                    const settingsData = localStorage.getItem('vaultchat_pro_settings');
+                    if (usersData) {
+                        this.users = JSON.parse(usersData);
+                    }
                     
-                    if (usersData) this.users = JSON.parse(usersData);
-                    if (messagesData) this.messages = JSON.parse(messagesData);
+                    // Загружаем сообщения
+                    const messagesData = localStorage.getItem('vaultchat_pro_messages');
+                    if (messagesData) {
+                        this.messages = JSON.parse(messagesData);
+                    }
+                    
+                    // Загружаем друзей
+                    const friendsData = localStorage.getItem('vaultchat_pro_friends');
+                    if (friendsData) {
+                        this.friends = JSON.parse(friendsData);
+                    }
+                    
+                    // Загружаем настройки
+                    const settingsData = localStorage.getItem('vaultchat_pro_settings');
                     if (settingsData) {
                         const settings = JSON.parse(settingsData);
                         this.soundEnabled = settings.soundEnabled !== false;
                     }
+                    
+                    // Создаем демо-данные только если пользователей нет
+                    if (this.users.length === 0) {
+                        this.createDemoUsers();
+                    }
+                    
                 } catch (e) {
                     console.error('Ошибка загрузки данных:', e);
+                    // При ошибке создаем демо-данные
+                    this.createDemoUsers();
                 }
             },
 
+            // ФИКС: Сохранение данных с проверками
             saveData() {
                 try {
+                    // Сохраняем пользователей
                     localStorage.setItem('vaultchat_pro_users', JSON.stringify(this.users));
+                    
+                    // Сохраняем сообщения
                     localStorage.setItem('vaultchat_pro_messages', JSON.stringify(this.messages));
+                    
+                    // Сохраняем друзей
+                    localStorage.setItem('vaultchat_pro_friends', JSON.stringify(this.friends));
+                    
+                    // Сохраняем настройки
                     localStorage.setItem('vaultchat_pro_settings', JSON.stringify({
-                        soundEnabled: this.soundEnabled
+                        soundEnabled: this.soundEnabled,
+                        lastUpdate: new Date().toISOString()
                     }));
+                    
+                    // Сохраняем ID последнего пользователя
+                    if (this.currentUser) {
+                        localStorage.setItem('vaultchat_last_user', this.currentUser.id);
+                    }
+                    
                 } catch (e) {
                     console.error('Ошибка сохранения данных:', e);
+                    this.showNotification('Ошибка сохранения данных', 'error');
                 }
             },
 
             createDemoUsers() {
                 const demoUsers = [
                     { 
-                        id: this.generateId(), 
-                        username: 'Кибер-Алекс', 
-                        password: this.hashPassword('demo123'), 
-                        online: true,
-                        avatar: '🤖',
-                        color: '#6366f1'
-                    },
-                    { 
-                        id: this.generateId(), 
-                        username: 'Техно-Мария', 
-                        password: this.hashPassword('demo123'), 
+                        id: 'DEMO001', 
+                        username: 'Алексей', 
+                        email: 'alex@demo.com',
+                        password: this.hashPassword('Demo123!'), 
                         online: false,
-                        avatar: '👩‍💻',
-                        color: '#8b5cf6'
-                    },
-                    { 
-                        id: this.generateId(), 
-                        username: 'Код-Иван', 
-                        password: this.hashPassword('demo123'), 
-                        online: true,
                         avatar: '👨‍💻',
-                        color: '#10b981'
+                        color: '#6366f1',
+                        bio: 'Люблю программирование и кофе',
+                        verified: true,
+                        createdAt: new Date().toISOString()
                     },
                     { 
-                        id: this.generateId(), 
-                        username: 'Дева-Елена', 
-                        password: this.hashPassword('demo123'), 
+                        id: 'DEMO002', 
+                        username: 'Мария', 
+                        email: 'maria@demo.com',
+                        password: this.hashPassword('Demo123!'), 
                         online: false,
-                        avatar: '👩‍🔬',
-                        color: '#f59e0b'
+                        avatar: '👩‍🎨',
+                        color: '#8b5cf6',
+                        bio: 'Дизайнер и художник',
+                        verified: true,
+                        createdAt: new Date().toISOString()
+                    },
+                    { 
+                        id: 'DEMO003', 
+                        username: 'Иван', 
+                        email: 'ivan@demo.com',
+                        password: this.hashPassword('Demo123!'), 
+                        online: false,
+                        avatar: '🚀',
+                        color: '#10b981',
+                        bio: 'Инженер и путешественник',
+                        verified: true,
+                        createdAt: new Date().toISOString()
                     }
                 ];
                 
@@ -1088,19 +1590,22 @@
                 return result;
             },
 
+            // ФИКС: Улучшенное хэширование пароля
             hashPassword(password) {
+                // Простое хэширование для демонстрации
                 let hash = 0;
                 for (let i = 0; i < password.length; i++) {
                     const char = password.charCodeAt(i);
                     hash = ((hash << 5) - hash) + char;
                     hash = hash & hash;
                 }
-                return Math.abs(hash).toString(16).substring(0, 12);
+                return Math.abs(hash).toString(16).padStart(12, '0');
             },
 
             showAuthScreen() {
                 document.getElementById('auth-screen').style.display = 'flex';
                 document.getElementById('chat-screen').style.display = 'none';
+                document.getElementById('verificationModal').classList.remove('show');
                 
                 // Анимация появления
                 document.querySelectorAll('.neon-input, .auth-btn').forEach((el, i) => {
@@ -1108,18 +1613,33 @@
                 });
             },
 
+            tryAutoLogin(userId) {
+                const user = this.users.find(u => u.id === userId);
+                if (user) {
+                    this.currentUser = user;
+                    user.online = true;
+                    this.showChatScreen();
+                } else {
+                    this.showAuthScreen();
+                }
+            },
+
             showChatScreen() {
                 document.getElementById('auth-screen').style.display = 'none';
                 document.getElementById('chat-screen').style.display = 'flex';
+                document.getElementById('verificationModal').classList.remove('show');
                 
                 this.displayUserInfo();
                 this.loadChatMessages();
                 this.updateOnlineCount();
+                this.loadFriendsList();
                 
-                // Показать приветственное сообщение
-                setTimeout(() => {
-                    this.showNotification('Добро пожаловать в VaultChat Pro!', 'success');
-                }, 1000);
+                // Показываем верификацию если email не подтвержден
+                if (this.currentUser && !this.currentUser.verified) {
+                    setTimeout(() => {
+                        this.showVerificationModal();
+                    }, 1000);
+                }
                 
                 // Адаптивная боковая панель
                 if (window.innerWidth <= 768) {
@@ -1143,6 +1663,23 @@
                     this.register();
                 });
 
+                // Валидация в реальном времени
+                document.getElementById('register-username').addEventListener('input', (e) => {
+                    this.validateUsername(e.target.value);
+                });
+
+                document.getElementById('register-email').addEventListener('input', (e) => {
+                    this.validateEmail(e.target.value);
+                });
+
+                document.getElementById('register-password').addEventListener('input', (e) => {
+                    this.validatePassword(e.target.value);
+                });
+
+                document.getElementById('register-confirm-password').addEventListener('input', (e) => {
+                    this.validateConfirmPassword(e.target.value);
+                });
+
                 // Ввод сообщения
                 const messageInput = document.getElementById('message-input');
                 messageInput.addEventListener('keypress', (e) => {
@@ -1156,6 +1693,11 @@
                     this.startTyping();
                 });
 
+                // Поиск друзей
+                document.getElementById('searchFriendsInput').addEventListener('input', (e) => {
+                    this.searchFriends(e.target.value);
+                });
+
                 // Переключение боковой панели на мобильных
                 document.getElementById('sidebarToggle').addEventListener('click', () => {
                     document.getElementById('sidebar').classList.toggle('show');
@@ -1167,13 +1709,6 @@
                         !e.target.closest('#sidebar') && 
                         !e.target.closest('#sidebarToggle')) {
                         document.getElementById('sidebar').classList.remove('show');
-                    }
-                });
-
-                // Переключение звуков
-                document.addEventListener('keydown', (e) => {
-                    if (e.ctrlKey && e.key === 'm') {
-                        this.toggleSound();
                     }
                 });
             },
@@ -1197,20 +1732,128 @@
                 }
             },
 
+            // ФИКС: Улучшенная валидация при регистрации
+            validateUsername(username) {
+                const errorElement = document.getElementById('username-error');
+                const inputElement = document.getElementById('register-username');
+                
+                if (username.length < 3) {
+                    this.showError(inputElement, errorElement, 'Имя должно содержать минимум 3 символа');
+                    return false;
+                }
+                
+                if (username.length > 20) {
+                    this.showError(inputElement, errorElement, 'Имя не должно превышать 20 символов');
+                    return false;
+                }
+                
+                // Проверка на уникальность имени
+                const usernameExists = this.users.some(u => 
+                    u.username.toLowerCase() === username.toLowerCase() && 
+                    u.id !== this.currentUser?.id
+                );
+                
+                if (usernameExists) {
+                    this.showError(inputElement, errorElement, 'Это имя уже занято');
+                    return false;
+                }
+                
+                this.clearError(inputElement, errorElement);
+                return true;
+            },
+
+            validateEmail(email) {
+                const errorElement = document.getElementById('email-error');
+                const inputElement = document.getElementById('register-email');
+                
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    this.showError(inputElement, errorElement, 'Введите корректный email');
+                    return false;
+                }
+                
+                // Проверка на уникальность email
+                const emailExists = this.users.some(u => 
+                    u.email.toLowerCase() === email.toLowerCase() && 
+                    u.id !== this.currentUser?.id
+                );
+                
+                if (emailExists) {
+                    this.showError(inputElement, errorElement, 'Этот email уже используется');
+                    return false;
+                }
+                
+                this.clearError(inputElement, errorElement);
+                return true;
+            },
+
+            validatePassword(password) {
+                const errorElement = document.getElementById('password-error');
+                const inputElement = document.getElementById('register-password');
+                
+                if (password.length < 8) {
+                    this.showError(inputElement, errorElement, 'Пароль должен содержать минимум 8 символов');
+                    return false;
+                }
+                
+                if (!/[A-Z]/.test(password)) {
+                    this.showError(inputElement, errorElement, 'Добавьте хотя бы одну заглавную букву');
+                    return false;
+                }
+                
+                if (!/\d/.test(password)) {
+                    this.showError(inputElement, errorElement, 'Добавьте хотя бы одну цифру');
+                    return false;
+                }
+                
+                this.clearError(inputElement, errorElement);
+                return true;
+            },
+
+            validateConfirmPassword(confirmPassword) {
+                const errorElement = document.getElementById('confirm-password-error');
+                const inputElement = document.getElementById('register-confirm-password');
+                const password = document.getElementById('register-password').value;
+                
+                if (confirmPassword !== password) {
+                    this.showError(inputElement, errorElement, 'Пароли не совпадают');
+                    return false;
+                }
+                
+                this.clearError(inputElement, errorElement);
+                return true;
+            },
+
+            showError(inputElement, errorElement, message) {
+                inputElement.classList.add('input-error');
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            },
+
+            clearError(inputElement, errorElement) {
+                inputElement.classList.remove('input-error');
+                errorElement.style.display = 'none';
+            },
+
             login() {
-                const userId = document.getElementById('login-id').value.trim().toUpperCase();
+                const login = document.getElementById('login-id').value.trim();
                 const password = document.getElementById('login-password').value;
                 
-                if (!userId || !password) {
+                if (!login || !password) {
                     this.showNotification('Заполните все поля', 'error');
                     return;
                 }
                 
-                const user = this.users.find(u => u.id === userId);
+                // Ищем пользователя по ID или email
+                const user = this.users.find(u => 
+                    u.id === login.toUpperCase() || 
+                    u.email.toLowerCase() === login.toLowerCase()
+                );
                 
                 if (user && user.password === this.hashPassword(password)) {
                     this.currentUser = user;
                     user.online = true;
+                    user.lastLogin = new Date().toISOString();
                     this.saveData();
                     this.showNotification('Вход выполнен успешно!', 'success');
                     
@@ -1218,7 +1861,7 @@
                     document.querySelector('.auth-card').style.animation = 'pulse 0.5s';
                     setTimeout(() => this.showChatScreen(), 800);
                 } else {
-                    this.showNotification('Неверный ID или пароль', 'error');
+                    this.showNotification('Неверный логин или пароль', 'error');
                     // Анимация ошибки
                     document.querySelector('.auth-card').style.animation = 'shake 0.5s';
                 }
@@ -1226,15 +1869,18 @@
 
             register() {
                 const username = document.getElementById('register-username').value.trim();
+                const email = document.getElementById('register-email').value.trim();
                 const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm-password').value;
                 
-                if (username.length < 2) {
-                    this.showNotification('Имя должно содержать минимум 2 символа', 'error');
-                    return;
-                }
+                // Валидация всех полей
+                const isUsernameValid = this.validateUsername(username);
+                const isEmailValid = this.validateEmail(email);
+                const isPasswordValid = this.validatePassword(password);
+                const isConfirmValid = this.validateConfirmPassword(confirmPassword);
                 
-                if (password.length < 6) {
-                    this.showNotification('Пароль должен содержать минимум 6 символов', 'error');
+                if (!isUsernameValid || !isEmailValid || !isPasswordValid || !isConfirmValid) {
+                    this.showNotification('Исправьте ошибки в форме', 'error');
                     return;
                 }
                 
@@ -1242,10 +1888,15 @@
                 const newUser = {
                     id: userId,
                     username: username,
+                    email: email.toLowerCase(),
                     password: this.hashPassword(password),
                     online: true,
                     avatar: '👤',
-                    color: this.getRandomColor()
+                    color: this.getRandomColor(),
+                    bio: 'Новый пользователь VaultChat',
+                    verified: false,
+                    createdAt: new Date().toISOString(),
+                    lastLogin: new Date().toISOString()
                 };
                 
                 this.users.push(newUser);
@@ -1254,9 +1905,70 @@
                 
                 this.showNotification(`Аккаунт создан! Ваш ID: ${userId}`, 'success');
                 
+                // Генерируем код верификации
+                this.generateVerificationCode();
+                this.pendingVerification = newUser;
+                
                 // Анимация создания аккаунта
                 document.querySelector('.auth-logo-icon').style.animation = 'pulse 1s';
-                setTimeout(() => this.showChatScreen(), 1500);
+                setTimeout(() => {
+                    this.showChatScreen();
+                    this.showVerificationModal();
+                }, 1500);
+            },
+
+            generateVerificationCode() {
+                // Генерируем 6-значный код
+                this.verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+                console.log('Код верификации (для теста):', this.verificationCode);
+            },
+
+            showVerificationModal() {
+                if (this.currentUser && !this.currentUser.verified) {
+                    document.getElementById('verificationModal').classList.add('show');
+                    this.generateVerificationCode();
+                    this.showNotification(`Код отправлен на ${this.currentUser.email}`, 'success');
+                }
+            },
+
+            verifyEmail() {
+                const codeInputs = document.querySelectorAll('.code-input');
+                let enteredCode = '';
+                codeInputs.forEach(input => {
+                    enteredCode += input.value;
+                });
+                
+                if (enteredCode === this.verificationCode) {
+                    if (this.currentUser) {
+                        this.currentUser.verified = true;
+                        this.currentUser.verifiedAt = new Date().toISOString();
+                        this.saveData();
+                        
+                        document.getElementById('verificationModal').classList.remove('show');
+                        this.showNotification('Email успешно подтвержден!', 'success');
+                        this.displayUserInfo();
+                        
+                        // Очищаем поля ввода
+                        codeInputs.forEach(input => input.value = '');
+                    }
+                } else {
+                    this.showNotification('Неверный код подтверждения', 'error');
+                    // Анимация ошибки
+                    codeInputs.forEach(input => {
+                        input.style.animation = 'shake 0.5s';
+                        setTimeout(() => input.style.animation = '', 500);
+                    });
+                }
+            },
+
+            resendVerificationCode() {
+                this.generateVerificationCode();
+                this.showNotification(`Новый код отправлен на ${this.currentUser.email}`, 'success');
+            },
+
+            skipVerification() {
+                document.getElementById('verificationModal').classList.remove('show');
+                this.showNotification('Вы можете подтвердить email позже в настройках профиля', 'success');
             },
 
             getRandomColor() {
@@ -1270,6 +1982,20 @@
                     document.getElementById('current-user-id').textContent = this.currentUser.id;
                     document.getElementById('user-avatar').innerHTML = this.currentUser.avatar || '<i class="fas fa-user"></i>';
                     document.getElementById('user-avatar').style.background = this.currentUser.color;
+                    
+                    // Обновляем статус email
+                    const emailStatus = document.getElementById('email-status');
+                    const emailText = document.getElementById('email-text');
+                    
+                    if (this.currentUser.verified) {
+                        emailStatus.className = 'email-status verified';
+                        emailText.textContent = 'Email подтвержден';
+                        emailStatus.innerHTML = `<i class="fas fa-check-circle"></i><span>Email подтвержден</span>`;
+                    } else {
+                        emailStatus.className = 'email-status unverified';
+                        emailText.textContent = 'Email не подтвержден';
+                        emailStatus.innerHTML = `<i class="fas fa-exclamation-circle"></i><span>Email не подтвержден</span>`;
+                    }
                 }
             },
 
@@ -1277,14 +2003,13 @@
                 const input = document.getElementById('message-input');
                 const messageText = input.value.trim();
                 
-                if (!messageText || !this.currentUser) return;
+                if (!messageText || !this.currentUser) {
+                    this.showNotification('Введите сообщение', 'error');
+                    return;
+                }
                 
                 // Создание анимации отправки
                 this.createSendAnimation();
-                
-                if (this.soundEnabled) {
-                    this.playSound('send');
-                }
                 
                 const message = {
                     id: Date.now(),
@@ -1295,7 +2020,8 @@
                     text: messageText,
                     timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                     date: new Date().toLocaleDateString(),
-                    chat: this.currentChat
+                    chat: this.currentChat,
+                    createdAt: new Date().toISOString()
                 };
                 
                 this.messages.push(message);
@@ -1321,44 +2047,6 @@
                 setTimeout(() => {
                     btn.style.animation = 'pulse 0.5s';
                 }, 10);
-                
-                // Создание частиц
-                for (let i = 0; i < 5; i++) {
-                    setTimeout(() => {
-                        this.createParticleEffect();
-                    }, i * 50);
-                }
-            },
-
-            createParticleEffect() {
-                const btn = document.querySelector('.send-btn');
-                const rect = btn.getBoundingClientRect();
-                
-                const particle = document.createElement('div');
-                particle.className = 'message-particle';
-                particle.style.left = `${rect.left + rect.width / 2}px`;
-                particle.style.top = `${rect.top + rect.height / 2}px`;
-                document.body.appendChild(particle);
-                
-                // Анимация частицы
-                const angle = Math.random() * Math.PI * 2;
-                const speed = 2 + Math.random() * 3;
-                let x = 0, y = 0;
-                
-                const animate = () => {
-                    x += Math.cos(angle) * speed;
-                    y += Math.sin(angle) * speed;
-                    particle.style.transform = `translate(${x}px, ${y}px)`;
-                    particle.style.opacity = 1 - (Math.sqrt(x*x + y*y) / 50);
-                    
-                    if (Math.abs(x) < 100 && Math.abs(y) < 100) {
-                        requestAnimationFrame(animate);
-                    } else {
-                        particle.remove();
-                    }
-                };
-                
-                animate();
             },
 
             simulateReply() {
@@ -1392,17 +2080,14 @@
                         text: replies[Math.floor(Math.random() * replies.length)],
                         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                         date: new Date().toLocaleDateString(),
-                        chat: this.currentChat
+                        chat: this.currentChat,
+                        createdAt: new Date().toISOString()
                     };
                     
                     this.messages.push(reply);
                     this.saveData();
                     this.displayMessage(reply, false);
                     this.hideTypingIndicator();
-                    
-                    if (this.soundEnabled) {
-                        this.playSound('receive');
-                    }
                 }, 1500 + Math.random() * 2000);
             },
 
@@ -1410,7 +2095,6 @@
                 if (!this.currentUser) return;
                 
                 this.typingUsers.add(this.currentUser.id);
-                // В реальном приложении здесь бы отправлялся сигнал на сервер
             },
 
             stopTyping() {
@@ -1469,15 +2153,19 @@
                 
                 chatArea.innerHTML = '';
                 
-                // Приветственное сообщение
-                if (filteredMessages.length === 0) {
+                // Загрузка истории
+                filteredMessages.forEach(msg => {
+                    const isSent = msg.userId === this.currentUser.id;
+                    this.displayMessage(msg, isSent);
+                });
+                
+                // Если нет сообщений, показываем приветствие
+                if (filteredMessages.length === 0 && this.currentChat === 'general') {
                     const welcomeMsg = document.createElement('div');
                     welcomeMsg.className = 'message received';
                     welcomeMsg.innerHTML = `
                         <div class="message-bubble">
-                            ${this.currentChat === 'general' 
-                                ? 'Добро пожаловать в общий чат! Здесь вы можете общаться со всеми пользователями.' 
-                                : 'Это ваши личные сообщения. Выберите контакт для начала общения.'}
+                            Добро пожаловать в общий чат! Здесь вы можете общаться со всеми пользователями.
                         </div>
                         <div class="message-info">
                             <span>Система</span>
@@ -1489,30 +2177,19 @@
                     `;
                     chatArea.appendChild(welcomeMsg);
                 }
-                
-                // Загрузка истории
-                filteredMessages.forEach(msg => {
-                    const isSent = msg.userId === this.currentUser.id;
-                    this.displayMessage(msg, isSent);
-                });
             },
 
             switchChat(chatType) {
                 this.currentChat = chatType;
                 document.getElementById('chat-title').textContent = 
-                    chatType === 'general' ? 'Общий чат' : 'Личные сообщения';
+                    chatType === 'general' ? 'Общий чат' : 'Приватный чат';
                 this.loadChatMessages();
-                
-                // Обновление активной кнопки в навигации
-                document.querySelectorAll('.nav-item').forEach(item => {
-                    item.classList.remove('active');
-                });
-                document.querySelector(`.nav-item[onclick*="${chatType}"]`).classList.add('active');
             },
 
             updateOnlineCount() {
                 const onlineUsers = this.users.filter(u => u.online);
                 document.getElementById('user-count').textContent = onlineUsers.length;
+                document.getElementById('general-badge').textContent = onlineUsers.length;
             },
 
             updateOnlineStatus() {
@@ -1537,6 +2214,138 @@
                 }
             },
 
+            // ФУНКЦИОНАЛ ПОИСКА ДРУЗЕЙ
+            openFriendsModal() {
+                document.getElementById('friendsModal').classList.add('show');
+                this.searchFriends('');
+            },
+
+            closeFriendsModal() {
+                document.getElementById('friendsModal').classList.remove('show');
+            },
+
+            searchFriends(query = '') {
+                const usersList = document.getElementById('usersList');
+                const searchTerm = query.toLowerCase().trim();
+                
+                // Фильтруем пользователей (исключая текущего)
+                const filteredUsers = this.users.filter(user => 
+                    user.id !== this.currentUser?.id && 
+                    (user.username.toLowerCase().includes(searchTerm) || 
+                     user.id.toLowerCase().includes(searchTerm) ||
+                     (user.email && user.email.toLowerCase().includes(searchTerm)))
+                );
+                
+                if (filteredUsers.length === 0) {
+                    usersList.innerHTML = `
+                        <div class="no-results">
+                            <i class="fas fa-search" style="font-size: 48px; margin-bottom: 15px; opacity: 0.5;"></i>
+                            <p>Пользователи не найдены</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                usersList.innerHTML = filteredUsers.map(user => {
+                    const isFriend = this.friends.some(f => f.id === user.id);
+                    
+                    return `
+                        <div class="user-item">
+                            <div class="user-avatar-small" style="background: ${user.color}">
+                                ${user.avatar}
+                            </div>
+                            <div class="user-info">
+                                <div class="user-name">${user.username} ${user.verified ? '✓' : ''}</div>
+                                <div class="user-id">ID: ${user.id}</div>
+                                <div class="user-status">
+                                    <div class="status-dot ${user.online ? 'online' : 'offline'}"></div>
+                                    <span>${user.online ? 'В сети' : 'Не в сети'}</span>
+                                </div>
+                            </div>
+                            <button class="add-friend-btn ${isFriend ? 'added' : ''}" 
+                                    onclick="VaultChat.toggleFriend('${user.id}')">
+                                ${isFriend ? '<i class="fas fa-check"></i> В друзьях' : '<i class="fas fa-user-plus"></i> Добавить'}
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            },
+
+            toggleFriend(userId) {
+                const friendIndex = this.friends.findIndex(f => f.id === userId);
+                const user = this.users.find(u => u.id === userId);
+                
+                if (friendIndex === -1) {
+                    // Добавляем в друзья
+                    this.friends.push({
+                        id: user.id,
+                        username: user.username,
+                        avatar: user.avatar,
+                        color: user.color,
+                        addedDate: new Date().toISOString()
+                    });
+                    this.showNotification(`${user.username} добавлен в друзья`, 'success');
+                } else {
+                    // Удаляем из друзей
+                    this.friends.splice(friendIndex, 1);
+                    this.showNotification(`${user.username} удален из друзей`, 'error');
+                }
+                
+                this.saveData();
+                this.loadFriendsList();
+                this.searchFriends(document.getElementById('searchFriendsInput').value);
+            },
+
+            loadFriendsList() {
+                const friendsList = document.getElementById('friendsList');
+                const friendsBadge = document.getElementById('friends-badge');
+                
+                if (!friendsList) return;
+                
+                friendsBadge.textContent = this.friends.length;
+                
+                if (this.friends.length === 0) {
+                    friendsList.innerHTML = `
+                        <div style="text-align: center; padding: 20px; color: var(--gray); font-size: 14px;">
+                            <i class="fas fa-user-friends" style="font-size: 24px; margin-bottom: 10px;"></i>
+                            <p>Друзей пока нет</p>
+                            <p style="font-size: 12px; opacity: 0.7;">Найдите друзей через поиск</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                friendsList.innerHTML = this.friends.map(friend => {
+                    const user = this.users.find(u => u.id === friend.id);
+                    const isOnline = user ? user.online : false;
+                    
+                    return `
+                        <div class="friend-item ${this.currentFriend === friend.id ? 'active' : ''}" 
+                             onclick="VaultChat.selectFriend('${friend.id}')">
+                            <div class="friend-avatar" style="background: ${friend.color}">
+                                ${friend.avatar}
+                            </div>
+                            <div class="friend-name">${friend.username}</div>
+                            <div class="status-dot ${isOnline ? 'online' : 'offline'}" 
+                                 style="width: 6px; height: 6px;"></div>
+                        </div>
+                    `;
+                }).join('');
+            },
+
+            selectFriend(friendId) {
+                this.currentFriend = friendId;
+                this.currentChat = 'private';
+                document.getElementById('chat-title').textContent = 'Приватный чат';
+                this.loadFriendsList();
+                this.loadChatMessages();
+                
+                // Закрываем боковую панель на мобильных
+                if (window.innerWidth <= 768) {
+                    document.getElementById('sidebar').classList.remove('show');
+                }
+            },
+
             showNotification(message, type = 'success') {
                 const notification = document.getElementById('notification');
                 notification.querySelector('.notification-message').textContent = message;
@@ -1551,30 +2360,6 @@
                 setTimeout(() => {
                     notification.classList.remove('show');
                 }, 3000);
-                
-                // Звук уведомления
-                if (this.soundEnabled && type === 'success') {
-                    this.playSound('notification');
-                }
-            },
-
-            playSound(type) {
-                try {
-                    const audio = new Audio(this.sounds[type]);
-                    audio.volume = 0.3;
-                    audio.play().catch(() => {});
-                } catch (e) {
-                    console.log('Звук не воспроизводится');
-                }
-            },
-
-            toggleSound() {
-                this.soundEnabled = !this.soundEnabled;
-                this.showNotification(
-                    `Звуки ${this.soundEnabled ? 'включены' : 'выключены'}`,
-                    this.soundEnabled ? 'success' : 'error'
-                );
-                this.saveData();
             },
 
             escapeHtml(text) {
@@ -1593,6 +2378,8 @@
                 document.querySelector('.app-container').style.animation = 'fadeOut 0.5s ease-out';
                 setTimeout(() => {
                     this.currentUser = null;
+                    this.currentFriend = null;
+                    this.currentChat = 'general';
                     this.showAuthScreen();
                     this.showNotification('Вы вышли из системы', 'success');
                 }, 500);
@@ -1613,7 +2400,6 @@
         }
 
         function toggleEmoji() {
-            // В будущем можно добавить палитру emoji
             const emojis = ['😊', '😂', '🤔', '👍', '❤️', '🎉', '🔥', '💯'];
             const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
             const input = document.getElementById('message-input');
@@ -1625,8 +2411,22 @@
             VaultChat.showNotification('Функция в разработке', 'error');
         }
 
+        function openFriendsModal() {
+            VaultChat.openFriendsModal();
+        }
+
+        function closeFriendsModal() {
+            VaultChat.closeFriendsModal();
+        }
+
+        function searchFriends() {
+            const query = document.getElementById('searchFriendsInput').value;
+            VaultChat.searchFriends(query);
+        }
+
         function showContacts() {
-            VaultChat.showNotification('Список контактов откроется здесь', 'success');
+            VaultChat.loadFriendsList();
+            VaultChat.showNotification('Список друзей обновлен', 'success');
         }
 
         function showSettings() {
@@ -1635,6 +2435,38 @@
 
         function showProfile() {
             VaultChat.showNotification('Профиль пользователя', 'success');
+        }
+
+        function showForgotPassword() {
+            VaultChat.showNotification('Функция восстановления пароля в разработке', 'error');
+        }
+
+        // Функции для верификации
+        function moveToNext(input, nextIndex) {
+            if (input.value.length === 1) {
+                const nextInput = document.querySelector(`.code-input[data-index="${nextIndex}"]`);
+                if (nextInput) {
+                    nextInput.focus();
+                }
+            }
+        }
+
+        function verifyCode(input) {
+            if (input.value.length === 1) {
+                input.blur();
+            }
+        }
+
+        function verifyEmail() {
+            VaultChat.verifyEmail();
+        }
+
+        function resendVerificationCode() {
+            VaultChat.resendVerificationCode();
+        }
+
+        function skipVerification() {
+            VaultChat.skipVerification();
         }
 
         // Инициализация при загрузке страницы
@@ -1668,6 +2500,41 @@
             } else {
                 toggleBtn.style.display = 'none';
                 document.getElementById('sidebar').classList.remove('show');
+            }
+        });
+
+        // Закрытие модальных окон при клике вне их
+        document.getElementById('friendsModal').addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-overlay')) {
+                closeFriendsModal();
+            }
+        });
+
+        document.getElementById('verificationModal').addEventListener('click', (e) => {
+            if (e.target.classList.contains('verification-modal')) {
+                skipVerification();
+            }
+        });
+
+        // Автофокус на первый input кода верификации
+        document.addEventListener('keydown', (e) => {
+            if (e.target.classList.contains('code-input')) {
+                // Разрешаем только цифры
+                if (!/^\d$/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'Tab') {
+                    e.preventDefault();
+                }
+                
+                // Обработка Backspace
+                if (e.key === 'Backspace' && e.target.value === '') {
+                    const prevIndex = parseInt(e.target.dataset.index) - 1;
+                    if (prevIndex >= 0) {
+                        const prevInput = document.querySelector(`.code-input[data-index="${prevIndex}"]`);
+                        if (prevInput) {
+                            prevInput.focus();
+                            prevInput.value = '';
+                        }
+                    }
+                }
             }
         });
     </script>
