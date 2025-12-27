@@ -12,7 +12,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -25,6 +25,8 @@
             --accent: #00ff88;
             --accent-hover: #00cc6a;
             --danger: #ff6b6b;
+            --warning: #ffd166;
+            --info: #118ab2;
         }
 
         body {
@@ -33,9 +35,10 @@
             font-family: 'Roboto', sans-serif;
             min-height: 100vh;
             margin: 0;
+            scroll-behavior: smooth;
         }
 
-        h1, h2, h3, h4, h5 {
+        h1, h2, h3, h4, h5, .logo-font {
             font-family: 'Orbitron', sans-serif;
             color: white;
         }
@@ -47,11 +50,29 @@
             align-items: center;
             text-align: center;
             position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.9) 70%);
         }
 
         .hero h1 {
             font-size: clamp(2.5rem, 5vw, 4.5rem);
-            text-shadow: 0 0 20px var(--accent);
+            text-shadow: 0 0 30px var(--accent), 0 0 60px rgba(0,255,136,0.3);
+            position: relative;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px var(--accent), 0 0 40px rgba(0,255,136,0.3); }
+            to { text-shadow: 0 0 30px var(--accent), 0 0 60px rgba(0,255,136,0.5); }
         }
 
         .btn-accent {
@@ -65,29 +86,76 @@
             transition: all 0.3s;
             cursor: pointer;
             z-index: 10;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-accent::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-accent:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn-accent:hover {
             background: var(--accent-hover);
             box-shadow: 0 0 30px rgba(0,255,136,0.8);
-            transform: translateY(-3px);
+            transform: translateY(-3px) scale(1.05);
         }
 
         .navbar-dark {
             background: rgba(22, 27, 34, 0.95) !important;
             backdrop-filter: blur(10px);
             border-bottom: 1px solid #30363d;
+            transition: all 0.3s;
+        }
+
+        .navbar.scrolled {
+            padding-top: 5px;
+            padding-bottom: 5px;
         }
 
         .nav-link {
             color: var(--text-light) !important;
             font-weight: 500;
-            transition: color 0.3s;
+            transition: all 0.3s;
+            position: relative;
+            margin: 0 5px;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: all 0.3s;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
         }
 
         .nav-link.active {
             color: var(--accent) !important;
-            border-bottom: 3px solid var(--accent);
+        }
+
+        .nav-link.active::after {
+            width: 80%;
         }
 
         .card-custom {
@@ -97,6 +165,12 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.3);
             padding: 25px;
             height: 100%;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card-custom:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
 
         .form-control, .form-select {
@@ -119,7 +193,7 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -142,19 +216,6 @@
             overflow-y: auto;
         }
 
-        .weight-form {
-            margin-top: 30px;
-            padding: 20px;
-            border-top: 1px solid #30363d;
-        }
-
-        .error-message {
-            color: var(--danger);
-            font-size: 0.875rem;
-            margin-top: 5px;
-            display: none;
-        }
-
         .stats-card {
             text-align: center;
             padding: 20px;
@@ -166,18 +227,229 @@
             color: var(--accent);
         }
 
-        .bmi-status {
-            font-size: 0.9rem;
-            padding: 5px 15px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-top: 10px;
+        .exercise-card {
+            background: #1c2128;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 1px solid #30363d;
+            transition: all 0.3s;
         }
 
-        .bmi-underweight { background: #3498db; }
-        .bmi-normal { background: var(--accent); color: #000; }
-        .bmi-overweight { background: #f39c12; }
-        .bmi-obese { background: var(--danger); }
+        .exercise-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .exercise-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .exercise-content {
+            padding: 20px;
+        }
+
+        .exercise-title {
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .exercise-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .meta-item i {
+            color: var(--accent);
+        }
+
+        .timer {
+            font-size: 2.5rem;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+            text-align: center;
+            padding: 20px;
+            background: rgba(0,255,136,0.1);
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .workout-day {
+            margin-bottom: 40px;
+        }
+
+        .day-header {
+            background: linear-gradient(90deg, var(--accent), var(--info));
+            color: #000;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .day-title {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .completion-badge {
+            background: rgba(0,0,0,0.3);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .sticker {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent);
+            color: #000;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transform: rotate(5deg);
+            animation: wiggle 2s infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(5deg); }
+            50% { transform: rotate(-5deg); }
+        }
+
+        .motivation-quote {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-style: italic;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .motivation-quote::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 80px;
+            opacity: 0.3;
+            font-family: serif;
+        }
+
+        .achievement-badge {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .progress-ring {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .progress-ring-circle {
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        .progress-ring-bg {
+            fill: none;
+            stroke: #30363d;
+            stroke-width: 8;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        .water-tracker {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .water-drop {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #00b4db, #0083b0);
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .water-drop.filled {
+            background: linear-gradient(135deg, #00b4db, #0083b0);
+            box-shadow: 0 0 15px rgba(0,180,219,0.5);
+        }
+
+        .water-drop:hover {
+            transform: rotate(-45deg) scale(1.1);
+        }
+
+        .streak-counter {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+        }
 
         @media (max-width: 768px) {
             .hero {
@@ -185,14 +457,66 @@
                 padding-top: 60px;
             }
             
-            .container {
-                padding-left: 15px;
-                padding-right: 15px;
+            .timer {
+                font-size: 2rem;
             }
             
-            .card-custom {
-                padding: 15px;
+            .exercise-meta {
+                flex-wrap: wrap;
             }
+        }
+
+        /* Пульсирующая анимация для уведомлений */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Анимация появления элементов */
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        /* Стили для модального окна достижений */
+        .achievement-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+
+        .achievement-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .achievement-content {
+            background: linear-gradient(135deg, var(--card-dark), #1c2128);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            transform: scale(0.8);
+            transition: transform 0.5s;
+        }
+
+        .achievement-modal.active .achievement-content {
+            transform: scale(1);
         }
     </style>
 </head>
@@ -202,19 +526,29 @@
     <div id="landing-page">
         <section class="hero">
             <div class="container position-relative">
-                <h1>FIT to ME</h1>
+                <h1 class="pulse">FIT to ME</h1>
                 <p class="lead fs-3">Твой личный фитнес-трекер</p>
                 <p class="fs-5 mb-5">Бесплатно. Без рекламы. Для всех.</p>
                 <button class="btn btn-accent btn-lg" id="start-button">Рассчитать программу</button>
+                
+                <!-- Анимированные элементы -->
+                <div class="position-absolute top-0 start-0 w-100 h-100" style="pointer-events: none; z-index: 1;">
+                    <div class="position-absolute" style="top: 20%; left: 10%; animation: float 6s infinite ease-in-out;">
+                        <div class="text-accent opacity-25"><i class="bi bi-dumbbell fs-1"></i></div>
+                    </div>
+                    <div class="position-absolute" style="top: 60%; right: 15%; animation: float 8s infinite ease-in-out 1s;">
+                        <div class="text-accent opacity-25"><i class="bi bi-heart-pulse fs-1"></i></div>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
 
     <!-- Личный кабинет -->
     <div id="dashboard" style="display: none;">
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNavbar">
             <div class="container">
-                <a class="navbar-brand" href="#"><i class="bi bi-activity me-2"></i>FitToMe</a>
+                <a class="navbar-brand logo-font" href="#"><i class="bi bi-activity me-2"></i>FitToMe</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -231,77 +565,214 @@
         </nav>
 
         <div class="container mt-5 pt-5">
+            <!-- Обзор -->
             <section id="overview" class="section">
-                <h2 class="text-center mb-5">Привет, <span id="user-name-display"></span>!</h2>
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <h2>Привет, <span id="user-name-display" class="text-accent"></span>!</h2>
+                        <p class="lead">Добро пожаловать в ваш персональный фитнес-центр</p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <div class="streak-counter">
+                            <i class="bi bi-fire"></i>
+                            <span id="streak-days">7</span> дней подряд
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Мотивационная цитата -->
+                <div class="motivation-quote">
+                    <p id="daily-quote">Спорт — это не просто упражнения, это стиль жизни.</p>
+                    <small>- Ваша мотивация на сегодня</small>
+                </div>
+
+                <!-- Основные показатели -->
                 <div class="row g-4 mb-5">
                     <div class="col-md-4">
                         <div class="card-custom stats-card">
                             <h5><i class="bi bi-fire me-2"></i>Рекомендуемые калории</h5>
                             <h3 id="target-calories">—</h3>
                             <p class="text-muted">в день</p>
+                            <div class="progress mt-3" style="height: 8px;">
+                                <div class="progress-bar bg-accent" id="calorie-progress" style="width: 65%"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card-custom stats-card">
                             <h5><i class="bi bi-speedometer2 me-2"></i>Текущий вес</h5>
                             <h3 id="current-weight-display">— кг</h3>
-                            <div class="weight-form">
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="update-weight" placeholder="Новый вес" step="0.1" min="30" max="300">
-                                    <button class="btn btn-accent" onclick="updateWeight()">Обновить</button>
-                                </div>
-                                <div class="error-message" id="weight-error"></div>
+                            <div class="input-group mt-3">
+                                <input type="number" class="form-control" id="update-weight" placeholder="Новый вес" step="0.1" min="30" max="300">
+                                <button class="btn btn-accent" onclick="updateWeight()">Обновить</button>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card-custom stats-card">
                             <h5><i class="bi bi-graph-up me-2"></i>Индекс массы тела</h5>
-                            <h3 id="bmi-display">—</h3>
-                            <div id="bmi-status" class="bmi-status"></div>
+                            <div class="progress-ring mx-auto mt-3">
+                                <svg class="progress-ring-circle" width="100" height="100">
+                                    <circle class="progress-ring-bg" cx="50" cy="50" r="45"></circle>
+                                    <circle class="progress-ring-fill" cx="50" cy="50" r="45" id="bmi-circle"></circle>
+                                </svg>
+                                <div class="progress-text" id="bmi-text">—</div>
+                            </div>
+                            <div id="bmi-status" class="mt-3"></div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <div class="card-custom">
-                            <h4><i class="bi bi-cup-hot me-2"></i>Рекомендации по питанию</h4>
-                            <div id="nutrition-tips"></div>
-                        </div>
+
+                <!-- Водный баланс -->
+                <div class="card-custom mb-4">
+                    <h4><i class="bi bi-droplet me-2"></i>Водный баланс</h4>
+                    <p>Выпейте достаточно воды сегодня</p>
+                    <div class="water-tracker">
+                        <div class="water-drop" onclick="toggleWaterDrop(this)"></div>
+                        <div class="water-drop" onclick="toggleWaterDrop(this)"></div>
+                        <div class="water-drop" onclick="toggleWaterDrop(this)"></div>
+                        <div class="water-drop" onclick="toggleWaterDrop(this)"></div>
+                        <div class="water-drop" onclick="toggleWaterDrop(this)"></div>
+                        <div class="water-drop" onclick="toggleWaterDrop(this)"></div>
+                        <div class="water-drop" onclick="toggleWaterDrop(this)"></div>
+                        <div class="water-drop" onclick="toggleWaterDrop(this)"></div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="card-custom">
-                            <h4><i class="bi bi-heart-pulse me-2"></i>Рекомендации по тренировкам</h4>
-                            <div id="workout-tips"></div>
+                    <div class="mt-3 text-muted">Цель: 8 стаканов (2 литра)</div>
+                </div>
+
+                <!-- Достижения -->
+                <div class="card-custom">
+                    <h4><i class="bi bi-trophy me-2"></i>Ваши достижения</h4>
+                    <div class="row text-center mt-4">
+                        <div class="col-4">
+                            <div class="achievement-badge">
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                            <div>Первая тренировка</div>
+                        </div>
+                        <div class="col-4">
+                            <div class="achievement-badge">
+                                <i class="bi bi-check2-circle"></i>
+                            </div>
+                            <div>Неделя без пропусков</div>
+                        </div>
+                        <div class="col-4">
+                            <div class="achievement-badge">
+                                <i class="bi bi-lightning"></i>
+                            </div>
+                            <div>Энерджайзер</div>
                         </div>
                     </div>
                 </div>
             </section>
 
+            <!-- Питание -->
             <section id="nutrition" class="section">
                 <h2 class="mb-4"><i class="bi bi-egg-fried me-2"></i>Твой план питания</h2>
                 <div class="card-custom">
                     <div id="nutrition-plan-display"></div>
-                    <div class="mt-4" id="nutrition-details"></div>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h5>Примерный рацион на день:</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item bg-transparent text-light border-secondary">Завтрак: Овсянка с ягодами</li>
+                                <li class="list-group-item bg-transparent text-light border-secondary">Перекус: Греческий йогурт</li>
+                                <li class="list-group-item bg-transparent text-light border-secondary">Обед: Куриная грудка с овощами</li>
+                                <li class="list-group-item bg-transparent text-light border-secondary">Ужин: Рыба с салатом</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Рекомендации по времени:</h5>
+                            <div class="timeline mt-3">
+                                <div class="timeline-item">
+                                    <div class="timeline-time">8:00</div>
+                                    <div class="timeline-content">Завтрак</div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-time">12:00</div>
+                                    <div class="timeline-content">Обед</div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-time">18:00</div>
+                                    <div class="timeline-content">Ужин</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
+            <!-- Тренировки -->
             <section id="workouts" class="section">
-                <h2 class="mb-4"><i class="bi bi-person-walking me-2"></i>Твоя программа тренировок</h2>
-                <div class="card-custom">
-                    <div id="workout-plan-display"></div>
-                    <div class="mt-4" id="workout-details"></div>
+                <h2 class="mb-4"><i class="bi bi-person-walking me-2"></i>Твои тренировки</h2>
+                
+                <!-- Таймер тренировки -->
+                <div class="card-custom mb-4">
+                    <h4><i class="bi bi-stopwatch me-2"></i>Таймер тренировки</h4>
+                    <div class="timer" id="workout-timer">00:00</div>
+                    <div class="timer-controls">
+                        <button class="btn btn-accent" onclick="startTimer()">Старт</button>
+                        <button class="btn btn-warning" onclick="pauseTimer()">Пауза</button>
+                        <button class="btn btn-danger" onclick="resetTimer()">Сброс</button>
+                    </div>
                 </div>
+
+                <!-- Программа тренировок -->
+                <div class="card-custom mb-4">
+                    <h4><i class="bi bi-calendar-week me-2"></i>Программа на неделю</h4>
+                    <div id="weekly-plan"></div>
+                </div>
+
+                <!-- Список упражнений -->
+                <div id="exercises-container"></div>
             </section>
 
+            <!-- Прогресс -->
             <section id="progress" class="section">
-                <h2 class="mb-4"><i class="bi bi-bar-chart me-2"></i>График веса</h2>
+                <h2 class="mb-4"><i class="bi bi-bar-chart me-2"></i>Ваш прогресс</h2>
                 <div class="card-custom">
                     <canvas id="weight-chart" height="300"></canvas>
-                    <div class="mt-4 text-center">
-                        <button class="btn btn-accent" onclick="exportData()"><i class="bi bi-download me-2"></i>Экспорт данных</button>
-                        <button class="btn btn-outline-light ms-2" onclick="clearHistory()"><i class="bi bi-trash me-2"></i>Очистить историю</button>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h5>Статистика тренировок</h5>
+                            <div class="mt-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Завершено тренировок</span>
+                                    <span class="text-accent">12</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Средняя длительность</span>
+                                    <span class="text-accent">45 мин</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Сожжено калорий</span>
+                                    <span class="text-accent">8,450</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Цели на месяц</h5>
+                            <div class="mt-3">
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Потеря веса</span>
+                                        <span>3/5 кг</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-accent" style="width: 60%"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Тренировок</span>
+                                        <span>8/12</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-info" style="width: 67%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -317,12 +788,10 @@
                 <div class="col-md-6">
                     <label class="form-label">Имя</label>
                     <input type="text" class="form-control" placeholder="Ваше имя" id="name">
-                    <div class="error-message" id="name-error"></div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Возраст</label>
                     <input type="number" class="form-control" placeholder="Возраст" id="age" min="16" max="100">
-                    <div class="error-message" id="age-error"></div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Пол</label>
@@ -331,29 +800,25 @@
                         <option value="male">Мужской</option>
                         <option value="female">Женский</option>
                     </select>
-                    <div class="error-message" id="gender-error"></div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Рост (см)</label>
                     <input type="number" class="form-control" placeholder="Рост" id="height" min="100" max="250">
-                    <div class="error-message" id="height-error"></div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Вес (кг)</label>
                     <input type="number" class="form-control" placeholder="Вес" id="weight" step="0.1" min="30" max="300">
-                    <div class="error-message" id="weight-input-error"></div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Уровень активности</label>
                     <select class="form-select" id="activity">
                         <option value="" disabled selected>Выберите активность</option>
                         <option value="1.2">Сидячий образ жизни</option>
-                        <option value="1.375">Лёгкая активность (1-3 раза в неделю)</option>
-                        <option value="1.55">Умеренная активность (3-5 раз в неделю)</option>
-                        <option value="1.725">Высокая активность (6-7 раз в неделю)</option>
-                        <option value="1.9">Очень высокая активность (профессиональный спорт)</option>
+                        <option value="1.375">Лёгкая активность</option>
+                        <option value="1.55">Умеренная активность</option>
+                        <option value="1.725">Высокая активность</option>
+                        <option value="1.9">Очень высокая активность</option>
                     </select>
-                    <div class="error-message" id="activity-error"></div>
                 </div>
                 <div class="col-12">
                     <label class="form-label">Цель</label>
@@ -363,13 +828,24 @@
                         <option value="gain">Набор мышечной массы</option>
                         <option value="maintain">Поддержание формы</option>
                     </select>
-                    <div class="error-message" id="goal-error"></div>
                 </div>
                 <div class="col-12 text-center mt-4">
-                    <button class="btn btn-accent btn-lg px-5" onclick="validateAndEnter()">Рассчитать и войти</button>
+                    <button class="btn btn-accent btn-lg px-5" onclick="enterDashboard()">Рассчитать и войти</button>
                     <button class="btn btn-outline-light mt-2 ms-2" onclick="hideForm()">Отмена</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно достижений -->
+    <div class="achievement-modal" id="achievementModal">
+        <div class="achievement-content">
+            <div class="achievement-badge mx-auto" style="width: 80px; height: 80px;">
+                <i class="bi bi-trophy fs-2"></i>
+            </div>
+            <h3 class="mt-4 text-accent">Достижение разблокировано!</h3>
+            <p id="achievement-text">Первая тренировка завершена</p>
+            <button class="btn btn-accent mt-4" onclick="closeAchievement()">Продолжить</button>
         </div>
     </div>
 
@@ -380,97 +856,175 @@
         let userData = {};
         let weightHistory = JSON.parse(localStorage.getItem('weightHistory')) || {};
         let chartInstance = null;
-
-        // Показ формы
-        document.getElementById('start-button').onclick = function() {
-            document.getElementById('quiz-form-overlay').style.display = 'flex';
+        let timerInterval = null;
+        let timerSeconds = 0;
+        let timerRunning = false;
+        let workoutPlans = {
+            loss: {
+                name: "Программа для похудения",
+                days: [
+                    {
+                        day: "День 1: Кардио + Силовая",
+                        exercises: [
+                            {
+                                name: "Бег на беговой дорожке",
+                                image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                                description: "Бег средней интенсивности для сжигания калорий",
+                                sets: "1",
+                                reps: "20-30 минут",
+                                difficulty: "Средняя",
+                                muscles: ["Ноги", "Сердечно-сосудистая система"],
+                                tips: "Поддерживайте темп, при котором вы можете говорить, но не петь"
+                            },
+                            {
+                                name: "Приседания",
+                                image: "https://images.unsplash.com/photo-1536922246289-88c42f957773?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                                description: "Базовое упражнение для ног и ягодиц",
+                                sets: "3",
+                                reps: "12-15 повторений",
+                                difficulty: "Начальная",
+                                muscles: ["Квадрицепсы", "Ягодицы", "Бицепсы бедра"],
+                                tips: "Следите за тем, чтобы колени не выходили за носки"
+                            }
+                        ]
+                    },
+                    {
+                        day: "День 2: Верх тела",
+                        exercises: [
+                            {
+                                name: "Отжимания",
+                                image: "https://images.unsplash.com/photo-1598974357801-cbca100e5d10?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                                description: "Упражнение для груди, плеч и трицепсов",
+                                sets: "3",
+                                reps: "10-15 повторений",
+                                difficulty: "Начальная",
+                                muscles: ["Грудь", "Плечи", "Трицепсы"],
+                                tips: "Держите тело прямым, не прогибайтесь в пояснице"
+                            },
+                            {
+                                name: "Подтягивания",
+                                image: "https://images.unsplash.com/photo-1549060279-7e168fce7090?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                                description: "Лучшее упражнение для спины",
+                                sets: "3",
+                                reps: "8-12 повторений",
+                                difficulty: "Продвинутая",
+                                muscles: ["Спина", "Бицепсы"],
+                                tips: "Если тяжело, используйте резиновые петли для помощи"
+                            }
+                        ]
+                    }
+                ]
+            },
+            gain: {
+                name: "Программа для набора массы",
+                days: [
+                    {
+                        day: "День 1: Грудь и Трицепс",
+                        exercises: [
+                            {
+                                name: "Жим штанги лежа",
+                                image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                                description: "Король упражнений для грудных мышц",
+                                sets: "4",
+                                reps: "8-10 повторений",
+                                difficulty: "Средняя",
+                                muscles: ["Грудь", "Плечи", "Трицепсы"],
+                                tips: "Опускайте штангу медленно, поднимайте мощно"
+                            },
+                            {
+                                name: "Разводка гантелей",
+                                image: "https://images.unsplash.com/photo-1534367507877-0edd93bd013b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                                description: "Изолирующее упражнение для грудных",
+                                sets: "3",
+                                reps: "12-15 повторений",
+                                difficulty: "Начальная",
+                                muscles: ["Грудь"],
+                                tips: "Слегка сгибайте руки в локтях"
+                            }
+                        ]
+                    }
+                ]
+            },
+            maintain: {
+                name: "Программа для поддержания формы",
+                days: [
+                    {
+                        day: "День 1: Full Body",
+                        exercises: [
+                            {
+                                name: "Берпи",
+                                image: "https://images.unsplash.com/photo-1598974357801-cbca100e5d10?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                                description: "Функциональное упражнение на все тело",
+                                sets: "4",
+                                reps: "10-12 повторений",
+                                difficulty: "Высокая",
+                                muscles: ["Все тело"],
+                                tips: "Сохраняйте быстрый темп, но контролируйте движения"
+                            },
+                            {
+                                name: "Планка",
+                                image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                                description: "Статическое упражнение для кора",
+                                sets: "3",
+                                reps: "30-60 секунд",
+                                difficulty: "Средняя",
+                                muscles: ["Пресс", "Спина", "Плечи"],
+                                tips: "Держите тело прямым, не опускайте таз"
+                            }
+                        ]
+                    }
+                ]
+            }
         };
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            // Показать форму
+            document.getElementById('start-button').onclick = function() {
+                document.getElementById('quiz-form-overlay').style.display = 'flex';
+            };
+
+            // Навигация по разделам
+            document.querySelectorAll('.nav-link[data-section]').forEach(link => {
+                link.onclick = function(e) {
+                    e.preventDefault();
+                    const section = this.getAttribute('data-section');
+                    document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+                    document.getElementById(section).style.display = 'block';
+                    document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    if (section === 'workouts') {
+                        loadWorkouts();
+                    }
+                };
+            });
+
+            // Загрузка приветственной цитаты
+            loadDailyQuote();
+            
+            // Автологин
+            if (localStorage.getItem('userData')) {
+                userData = JSON.parse(localStorage.getItem('userData'));
+                weightHistory = JSON.parse(localStorage.getItem('weightHistory')) || {};
+                document.getElementById('landing-page').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                loadDashboard();
+            }
+
+            // Скролл навбара
+            window.addEventListener('scroll', function() {
+                const navbar = document.getElementById('mainNavbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        });
 
         function hideForm() {
             document.getElementById('quiz-form-overlay').style.display = 'none';
-            clearErrors();
-        }
-
-        function clearErrors() {
-            document.querySelectorAll('.error-message').forEach(el => {
-                el.style.display = 'none';
-                el.textContent = '';
-            });
-        }
-
-        function showError(elementId, message) {
-            const el = document.getElementById(elementId);
-            el.textContent = message;
-            el.style.display = 'block';
-        }
-
-        // Навигация
-        document.querySelectorAll('.nav-link[data-section]').forEach(link => {
-            link.onclick = function(e) {
-                e.preventDefault();
-                const section = this.getAttribute('data-section');
-                document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
-                document.getElementById(section).style.display = 'block';
-                document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Обновляем график при переходе в прогресс
-                if (section === 'progress') {
-                    updateChart();
-                }
-            };
-        });
-
-        function validateAndEnter() {
-            clearErrors();
-            let isValid = true;
-
-            const name = document.getElementById('name').value.trim();
-            const age = parseInt(document.getElementById('age').value);
-            const gender = document.getElementById('gender').value;
-            const height = parseFloat(document.getElementById('height').value);
-            const weight = parseFloat(document.getElementById('weight').value);
-            const activity = document.getElementById('activity').value;
-            const goal = document.getElementById('goal').value;
-
-            if (!name) {
-                showError('name-error', 'Введите имя');
-                isValid = false;
-            }
-
-            if (!age || age < 16 || age > 100) {
-                showError('age-error', 'Введите возраст от 16 до 100 лет');
-                isValid = false;
-            }
-
-            if (!gender) {
-                showError('gender-error', 'Выберите пол');
-                isValid = false;
-            }
-
-            if (!height || height < 100 || height > 250) {
-                showError('height-error', 'Введите рост от 100 до 250 см');
-                isValid = false;
-            }
-
-            if (!weight || weight < 30 || weight > 300) {
-                showError('weight-input-error', 'Введите вес от 30 до 300 кг');
-                isValid = false;
-            }
-
-            if (!activity) {
-                showError('activity-error', 'Выберите уровень активности');
-                isValid = false;
-            }
-
-            if (!goal) {
-                showError('goal-error', 'Выберите цель');
-                isValid = false;
-            }
-
-            if (isValid) {
-                enterDashboard();
-            }
         }
 
         function enterDashboard() {
@@ -484,84 +1038,27 @@
                 goal: document.getElementById('goal').value
             };
 
+            if (!userData.age || !userData.height || !userData.weight || !userData.gender || !userData.activity || !userData.goal) {
+                alert('Заполните все поля!');
+                return;
+            }
+
             localStorage.setItem('userData', JSON.stringify(userData));
 
             const today = new Date().toISOString().split('T')[0];
             weightHistory[today] = userData.weight;
             localStorage.setItem('weightHistory', JSON.stringify(weightHistory));
 
-            // Переход
             document.getElementById('landing-page').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
             document.getElementById('quiz-form-overlay').style.display = 'none';
 
             loadDashboard();
-        }
-
-        function updateWeight() {
-            const newWeight = parseFloat(document.getElementById('update-weight').value);
-            if (!newWeight || newWeight < 30 || newWeight > 300) {
-                document.getElementById('weight-error').textContent = 'Введите корректный вес (30-300 кг)';
-                document.getElementById('weight-error').style.display = 'block';
-                return;
-            }
-
-            userData.weight = newWeight;
-            localStorage.setItem('userData', JSON.stringify(userData));
-
-            const today = new Date().toISOString().split('T')[0];
-            weightHistory[today] = newWeight;
-            localStorage.setItem('weightHistory', JSON.stringify(weightHistory));
-
-            document.getElementById('current-weight-display').textContent = newWeight.toFixed(1) + ' кг';
-            document.getElementById('update-weight').value = '';
-            document.getElementById('weight-error').style.display = 'none';
-
-            // Обновляем BMI
-            updateBMI();
             
-            // Обновляем график
-            updateChart();
-            
-            // Показываем уведомление
-            showNotification('Вес успешно обновлен!');
-        }
-
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.className = 'position-fixed bottom-0 end-0 m-3 p-3 bg-success text-white rounded';
-            notification.style.zIndex = '1000';
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
+            // Показать достижение
             setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-
-        function updateBMI() {
-            const bmi = (userData.weight / ((userData.height / 100) ** 2)).toFixed(1);
-            document.getElementById('bmi-display').textContent = bmi;
-            
-            let status = '';
-            let statusClass = '';
-            if (bmi < 18.5) {
-                status = 'Недостаточный вес';
-                statusClass = 'bmi-underweight';
-            } else if (bmi < 25) {
-                status = 'Нормальный вес';
-                statusClass = 'bmi-normal';
-            } else if (bmi < 30) {
-                status = 'Избыточный вес';
-                statusClass = 'bmi-overweight';
-            } else {
-                status = 'Ожирение';
-                statusClass = 'bmi-obese';
-            }
-            
-            const statusEl = document.getElementById('bmi-status');
-            statusEl.textContent = status;
-            statusEl.className = `bmi-status ${statusClass}`;
+                showAchievement("Добро пожаловать в FitToMe!");
+            }, 1000);
         }
 
         function loadDashboard() {
@@ -576,105 +1073,187 @@
                          : userData.goal === 'gain' ? Math.round(tdee + 500)
                          : Math.round(tdee);
 
-            document.getElementById('target-calories').textContent = target.toLocaleString() + ' ккал';
-            document.getElementById('current-weight-display').textContent = userData.weight.toFixed(1) + ' кг';
+            document.getElementById('target-calories').textContent = target.toLocaleString();
+            document.getElementById('current-weight-display').textContent = userData.weight.toFixed(1);
 
+            // Обновление BMI
             updateBMI();
 
-            // Питание
-            let nutritionHTML = '<h5>Основные принципы:</h5><ul class="list-group list-group-flush">';
-            if (userData.goal === 'loss') {
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Дефицит калорий: 500 ккал/день</li>';
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Белок: 1.8–2.2 г на кг веса</li>';
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Овощи в каждый прием пищи</li>';
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Пить 2-3 литра воды в день</li>';
-            } else if (userData.goal === 'gain') {
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Профицит калорий: 500 ккал/день</li>';
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Белок: 2 г на кг веса</li>';
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Сложные углеводы для энергии</li>';
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Здоровые жиры: орехи, авокадо</li>';
-            } else {
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Поддержание баланса калорий</li>';
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Сбалансированное БЖУ</li>';
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Регулярное питание 3-5 раз в день</li>';
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Слушайте сигналы голода</li>';
-            }
-            nutritionHTML += '</ul>';
-            document.getElementById('nutrition-plan-display').innerHTML = nutritionHTML;
+            // Загрузка тренировок
+            loadWorkouts();
 
-            // Детали питания
-            const protein = Math.round(userData.weight * (userData.goal === 'gain' ? 2 : 1.8));
-            const carbs = Math.round(target * (userData.goal === 'gain' ? 0.5 : 0.4) / 4);
-            const fat = Math.round(target * 0.3 / 9);
-            
-            document.getElementById('nutrition-details').innerHTML = `
-                <h5>Рекомендуемое распределение:</h5>
-                <div class="row text-center">
-                    <div class="col-4">
-                        <div class="display-6 text-accent">${protein}g</div>
-                        <div class="text-muted">Белок</div>
-                    </div>
-                    <div class="col-4">
-                        <div class="display-6 text-accent">${carbs}g</div>
-                        <div class="text-muted">Углеводы</div>
-                    </div>
-                    <div class="col-4">
-                        <div class="display-6 text-accent">${fat}g</div>
-                        <div class="text-muted">Жиры</div>
-                    </div>
-                </div>
-            `;
-
-            // Тренировки
-            let workoutHTML = '<h5>Рекомендуемая программа:</h5><ul class="list-group list-group-flush">';
-            if (userData.goal === 'loss') {
-                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">3–4 силовые тренировки в неделю</li>';
-                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">20–30 минут кардио после силовой</li>';
-                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">HIIT 2 раза в неделю</li>';
-                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">10,000 шагов ежедневно</li>';
-            } else if (userData.goal === 'gain') {
-                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">4–5 силовых тренировок в неделю</li>';
-                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Акцент на базовые упражнения</li>';
-                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Прогрессия нагрузок</li>';
-                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Менее 30 минут кардио</li>';
-            } else {
-                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">3–4 тренировки в неделю</li>';
-                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Full-body или сплит программа</li>';
-                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Разнообразие упражнений</li>';
-                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Йога/стрейчинг 1-2 раза в неделю</li>';
-            }
-            workoutHTML += '</ul>';
-            document.getElementById('workout-plan-display').innerHTML = workoutHTML;
-
-            // Детали тренировок
-            document.getElementById('workout-details').innerHTML = `
-                <h5>Пример тренировочного дня:</h5>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item bg-transparent text-light border-secondary">Разминка: 10 минут</li>
-                    <li class="list-group-item bg-transparent text-light border-secondary">Основные упражнения: 3-4 подхода по 8-12 повторений</li>
-                    <li class="list-group-item bg-transparent text-light border-secondary">Заминка: 5-10 минут</li>
-                </ul>
-            `;
-
-            // Общие рекомендации
-            document.getElementById('nutrition-tips').innerHTML = `
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item bg-transparent text-light border-secondary">Завтрак в течение часа после пробуждения</li>
-                    <li class="list-group-item bg-transparent text-light border-secondary">Белок в каждый прием пищи</li>
-                    <li class="list-group-item bg-transparent text-light border-secondary">Пейте воду перед едой</li>
-                </ul>
-            `;
-
-            document.getElementById('workout-tips').innerHTML = `
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item bg-transparent text-light border-secondary">Концентрируйтесь на технике</li>
-                    <li class="list-group-item bg-transparent text-light border-secondary">Ведите дневник тренировок</li>
-                    <li class="list-group-item bg-transparent text-light border-secondary">Спите 7-9 часов</li>
-                </ul>
-            `;
-
-            // График
+            // Обновление графика
             updateChart();
+        }
+
+        function updateBMI() {
+            const bmi = (userData.weight / ((userData.height / 100) ** 2)).toFixed(1);
+            const bmiCircle = document.getElementById('bmi-circle');
+            const bmiText = document.getElementById('bmi-text');
+            const bmiStatus = document.getElementById('bmi-status');
+            
+            bmiText.textContent = bmi;
+            
+            let status = '';
+            let statusClass = '';
+            let progress = 0;
+            
+            if (bmi < 18.5) {
+                status = 'Недостаточный вес';
+                statusClass = 'text-info';
+                progress = (bmi / 18.5) * 100;
+            } else if (bmi < 25) {
+                status = 'Нормальный вес';
+                statusClass = 'text-accent';
+                progress = ((bmi - 18.5) / 6.5) * 100;
+            } else if (bmi < 30) {
+                status = 'Избыточный вес';
+                statusClass = 'text-warning';
+                progress = ((bmi - 25) / 5) * 100;
+            } else {
+                status = 'Ожирение';
+                statusClass = 'text-danger';
+                progress = Math.min(((bmi - 30) / 10) * 100, 100);
+            }
+            
+            const circumference = 2 * Math.PI * 45;
+            const offset = circumference - (progress / 100) * circumference;
+            bmiCircle.style.strokeDashoffset = offset;
+            
+            bmiStatus.innerHTML = `<span class="${statusClass}">${status}</span>`;
+        }
+
+        function loadWorkouts() {
+            const container = document.getElementById('exercises-container');
+            const weeklyPlan = document.getElementById('weekly-plan');
+            const plan = workoutPlans[userData.goal];
+            
+            if (!plan) return;
+            
+            // Загрузка недельного плана
+            let weeklyHTML = '<div class="row">';
+            plan.days.forEach((day, index) => {
+                weeklyHTML += `
+                    <div class="col-md-4 mb-3">
+                        <div class="card-custom">
+                            <h6>${day.day}</h6>
+                            <p class="small text-muted">${day.exercises.length} упражнения</p>
+                            <button class="btn btn-sm btn-accent" onclick="showDay(${index})">Начать</button>
+                        </div>
+                    </div>
+                `;
+            });
+            weeklyHTML += '</div>';
+            weeklyPlan.innerHTML = weeklyHTML;
+            
+            // Загрузка упражнений
+            container.innerHTML = '';
+            plan.days.forEach((day, dayIndex) => {
+                const dayHTML = `
+                    <div class="workout-day fade-in">
+                        <div class="day-header">
+                            <h4 class="day-title">${day.day}</h4>
+                            <span class="completion-badge">${day.exercises.length} упражнений</span>
+                        </div>
+                        <div class="row">
+                            ${day.exercises.map((exercise, exIndex) => `
+                                <div class="col-md-6 mb-4">
+                                    <div class="exercise-card position-relative">
+                                        <span class="sticker">${exercise.difficulty}</span>
+                                        <img src="${exercise.image}" alt="${exercise.name}" class="exercise-img">
+                                        <div class="exercise-content">
+                                            <h5 class="exercise-title">${exercise.name}</h5>
+                                            <p>${exercise.description}</p>
+                                            <div class="exercise-meta">
+                                                <div class="meta-item">
+                                                    <i class="bi bi-arrow-repeat"></i>
+                                                    <span>${exercise.sets} подхода</span>
+                                                </div>
+                                                <div class="meta-item">
+                                                    <i class="bi bi-activity"></i>
+                                                    <span>${exercise.reps}</span>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <strong>Работающие мышцы:</strong>
+                                                <div class="mt-1">
+                                                    ${exercise.muscles.map(muscle => 
+                                                        `<span class="badge bg-dark me-1">${muscle}</span>`
+                                                    ).join('')}
+                                                </div>
+                                            </div>
+                                            <div class="alert alert-dark">
+                                                <i class="bi bi-lightbulb"></i>
+                                                <strong>Совет:</strong> ${exercise.tips}
+                                            </div>
+                                            <div class="d-flex gap-2">
+                                                <button class="btn btn-sm btn-accent" onclick="startExercise('${exercise.name}')">
+                                                    <i class="bi bi-play-circle"></i> Начать
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-light" onclick="showExerciseDetail('${exercise.name}')">
+                                                    <i class="bi bi-info-circle"></i> Детали
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += dayHTML;
+            });
+        }
+
+        function showDay(dayIndex) {
+            const sections = document.querySelectorAll('.workout-day');
+            sections.forEach((section, index) => {
+                if (index === dayIndex) {
+                    section.style.display = 'block';
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        }
+
+        function startExercise(exerciseName) {
+            showNotification(`Начинаем упражнение: ${exerciseName}`);
+            startTimer();
+        }
+
+        function showExerciseDetail(exerciseName) {
+            alert(`Детальная информация об упражнении: ${exerciseName}\n\nЗдесь будет подробная техника выполнения с видео и фото.`);
+        }
+
+        // Таймер тренировки
+        function startTimer() {
+            if (timerRunning) return;
+            
+            timerRunning = true;
+            const timerDisplay = document.getElementById('workout-timer');
+            
+            timerInterval = setInterval(() => {
+                timerSeconds++;
+                const minutes = Math.floor(timerSeconds / 60);
+                const seconds = timerSeconds % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Уведомление каждые 5 минут
+                if (timerSeconds % 300 === 0) {
+                    showNotification('Отличная работа! Продолжаем!');
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            timerRunning = false;
+            clearInterval(timerInterval);
+        }
+
+        function resetTimer() {
+            timerRunning = false;
+            clearInterval(timerInterval);
+            timerSeconds = 0;
+            document.getElementById('workout-timer').textContent = '00:00';
         }
 
         function updateChart() {
@@ -709,9 +1288,7 @@
                         legend: {
                             labels: {
                                 color: 'white',
-                                font: {
-                                    size: 14
-                                }
+                                font: { size: 14 }
                             }
                         },
                         tooltip: {
@@ -722,21 +1299,12 @@
                     },
                     scales: {
                         x: {
-                            ticks: {
-                                color: 'white',
-                                maxRotation: 45
-                            },
-                            grid: {
-                                color: 'rgba(255,255,255,0.1)'
-                            }
+                            ticks: { color: 'white', maxRotation: 45 },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
                         },
                         y: {
-                            ticks: {
-                                color: 'white'
-                            },
-                            grid: {
-                                color: 'rgba(255,255,255,0.1)'
-                            },
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
                             title: {
                                 display: true,
                                 text: 'Вес (кг)',
@@ -753,56 +1321,152 @@
             return date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
         }
 
-        function exportData() {
-            const data = {
-                userData: userData,
-                weightHistory: weightHistory,
-                exportDate: new Date().toISOString()
-            };
+        function updateWeight() {
+            const newWeight = parseFloat(document.getElementById('update-weight').value);
+            if (!newWeight || newWeight < 30 || newWeight > 300) {
+                alert('Введите корректный вес (30-300 кг)');
+                return;
+            }
+
+            userData.weight = newWeight;
+            localStorage.setItem('userData', JSON.stringify(userData));
+
+            const today = new Date().toISOString().split('T')[0];
+            weightHistory[today] = newWeight;
+            localStorage.setItem('weightHistory', JSON.stringify(weightHistory));
+
+            document.getElementById('current-weight-display').textContent = newWeight.toFixed(1) + ' кг';
+            document.getElementById('update-weight').value = '';
+
+            updateBMI();
+            updateChart();
+            showNotification('Вес успешно обновлен!');
             
-            const dataStr = JSON.stringify(data, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            
-            const exportFileDefaultName = `FitToMe_data_${new Date().toISOString().split('T')[0]}.json`;
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-            
-            showNotification('Данные успешно экспортированы!');
+            // Показать достижение если прогресс
+            if (userData.goal === 'loss' && newWeight < userData.weight) {
+                showAchievement("Отличный прогресс! Вес снижается!");
+            }
         }
 
-        function clearHistory() {
-            if (confirm('Вы уверены, что хотите очистить всю историю веса? Это действие нельзя отменить.')) {
-                weightHistory = {};
-                localStorage.removeItem('weightHistory');
-                updateChart();
-                showNotification('История веса очищена');
+        function toggleWaterDrop(element) {
+            element.classList.toggle('filled');
+            const filled = document.querySelectorAll('.water-drop.filled').length;
+            
+            if (filled === 8) {
+                showAchievement("Отличная гидратация! Все стаканы воды выпиты!");
             }
+            
+            showNotification(`Выпито ${filled} из 8 стаканов воды`);
+        }
+
+        function showNotification(message) {
+            // Создаем уведомление
+            const notification = document.createElement('div');
+            notification.className = 'position-fixed bottom-0 end-0 m-3 p-3 bg-success text-white rounded';
+            notification.style.zIndex = '1000';
+            notification.style.maxWidth = '300px';
+            notification.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.5s';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        function showAchievement(text) {
+            const modal = document.getElementById('achievementModal');
+            document.getElementById('achievement-text').textContent = text;
+            modal.classList.add('active');
+            
+            // Автоматическое скрытие через 5 секунд
+            setTimeout(() => {
+                modal.classList.remove('active');
+            }, 5000);
+        }
+
+        function closeAchievement() {
+            document.getElementById('achievementModal').classList.remove('active');
+        }
+
+        function loadDailyQuote() {
+            const quotes = [
+                "Спорт — это не просто упражнения, это стиль жизни.",
+                "Каждая тренировка приближает тебя к цели.",
+                "Сила не в мышцах, а в силе воли.",
+                "Твое тело может всё. Нужно только убедить в этом разум.",
+                "Не важно, как медленно ты продвигаешься. Главное — ты не останавливаешься.",
+                "Сегодняшняя боль — завтрашняя сила.",
+                "Тренировка — это праздник, на который ты приглашаешь свое тело.",
+                "Лучшая инвестиция — инвестиция в себя.",
+                "Не бойся начинать заново. Бойся остановиться.",
+                "Успех — это сумма маленьких усилий, повторяемых изо дня в день."
+            ];
+            
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('daily-quote').textContent = randomQuote;
         }
 
         function logout() {
             if (confirm('Вы уверены, что хотите выйти?')) {
+                pauseTimer();
                 localStorage.removeItem('userData');
                 location.reload();
             }
         }
 
-        // Автологин
-        if (localStorage.getItem('userData')) {
-            userData = JSON.parse(localStorage.getItem('userData'));
-            weightHistory = JSON.parse(localStorage.getItem('weightHistory')) || {};
-            document.getElementById('landing-page').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            loadDashboard();
-        }
-
-        // Инициализация Bootstrap компонентов
-        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
+        // Плавающая анимация для декоративных элементов
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-20px); }
+            }
+            
+            .timeline {
+                position: relative;
+                padding-left: 30px;
+            }
+            
+            .timeline::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 2px;
+                background: var(--accent);
+            }
+            
+            .timeline-item {
+                position: relative;
+                margin-bottom: 20px;
+            }
+            
+            .timeline-item::before {
+                content: '';
+                position: absolute;
+                left: -34px;
+                top: 5px;
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: var(--accent);
+            }
+            
+            .timeline-time {
+                font-weight: bold;
+                color: var(--accent);
+                margin-bottom: 5px;
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
