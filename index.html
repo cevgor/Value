@@ -53,6 +53,16 @@
             overflow: hidden;
         }
 
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.9) 70%);
+        }
+
         .hero h1 {
             font-size: clamp(2.5rem, 5vw, 4.5rem);
             text-shadow: 0 0 30px var(--accent), 0 0 60px rgba(0,255,136,0.3);
@@ -76,29 +86,76 @@
             transition: all 0.3s;
             cursor: pointer;
             z-index: 10;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-accent::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-accent:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn-accent:hover {
             background: var(--accent-hover);
             box-shadow: 0 0 30px rgba(0,255,136,0.8);
-            transform: translateY(-3px);
+            transform: translateY(-3px) scale(1.05);
         }
 
         .navbar-dark {
             background: rgba(22, 27, 34, 0.95) !important;
             backdrop-filter: blur(10px);
             border-bottom: 1px solid #30363d;
+            transition: all 0.3s;
+        }
+
+        .navbar.scrolled {
+            padding-top: 5px;
+            padding-bottom: 5px;
         }
 
         .nav-link {
             color: var(--text-light) !important;
             font-weight: 500;
-            transition: color 0.3s;
+            transition: all 0.3s;
+            position: relative;
+            margin: 0 5px;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: all 0.3s;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
         }
 
         .nav-link.active {
             color: var(--accent) !important;
-            border-bottom: 3px solid var(--accent);
+        }
+
+        .nav-link.active::after {
+            width: 80%;
         }
 
         .card-custom {
@@ -108,6 +165,12 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.3);
             padding: 25px;
             height: 100%;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card-custom:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
 
         .form-control, .form-select {
@@ -115,6 +178,13 @@
             border: 1px solid #30363d;
             color: white;
             transition: border-color 0.3s;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: #161b22;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.25rem rgba(0,255,136,0.25);
+            color: white;
         }
 
         .section {
@@ -146,6 +216,17 @@
             overflow-y: auto;
         }
 
+        .stats-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stats-card h3 {
+            font-size: 2.5rem;
+            margin: 15px 0;
+            color: var(--accent);
+        }
+
         .exercise-card {
             background: #1c2128;
             border-radius: 10px;
@@ -153,13 +234,11 @@
             margin-bottom: 20px;
             border: 1px solid #30363d;
             transition: all 0.3s;
-            height: 100%;
         }
 
         .exercise-card:hover {
             border-color: var(--accent);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,255,136,0.2);
+            transform: translateY(-3px);
         }
 
         .exercise-img {
@@ -183,7 +262,6 @@
             display: flex;
             gap: 15px;
             margin-bottom: 15px;
-            flex-wrap: wrap;
         }
 
         .meta-item {
@@ -245,91 +323,132 @@
             font-size: 0.9rem;
         }
 
-        .difficulty-badge {
+        .sticker {
             position: absolute;
             top: 10px;
             right: 10px;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            z-index: 1;
-        }
-
-        .difficulty-beginner {
             background: var(--accent);
             color: #000;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transform: rotate(5deg);
+            animation: wiggle 2s infinite;
         }
 
-        .difficulty-intermediate {
-            background: var(--warning);
-            color: #000;
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(5deg); }
+            50% { transform: rotate(-5deg); }
         }
 
-        .difficulty-advanced {
-            background: var(--danger);
+        .motivation-quote {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-        }
-
-        .workout-video {
-            width: 100%;
-            height: 200px;
+            padding: 20px;
             border-radius: 10px;
-            margin-top: 15px;
-            display: none;
-        }
-
-        .video-container {
+            margin: 20px 0;
+            text-align: center;
+            font-style: italic;
             position: relative;
-            margin-top: 15px;
+            overflow: hidden;
         }
 
-        .play-button {
+        .motivation-quote::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 80px;
+            opacity: 0.3;
+            font-family: serif;
+        }
+
+        .achievement-badge {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .progress-ring {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .progress-ring-circle {
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        .progress-ring-bg {
+            fill: none;
+            stroke: #30363d;
+            stroke-width: 8;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .progress-text {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.7);
-            border: none;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            color: white;
-            font-size: 24px;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        .water-tracker {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .water-drop {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #00b4db, #0083b0);
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
             cursor: pointer;
             transition: all 0.3s;
         }
 
-        .play-button:hover {
-            background: var(--accent);
+        .water-drop.filled {
+            background: linear-gradient(135deg, #00b4db, #0083b0);
+            box-shadow: 0 0 15px rgba(0,180,219,0.5);
+        }
+
+        .water-drop:hover {
+            transform: rotate(-45deg) scale(1.1);
+        }
+
+        .streak-counter {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
             color: #000;
-            transform: translate(-50%, -50%) scale(1.1);
-        }
-
-        .workout-complete {
-            background: rgba(0,255,136,0.1);
-            border: 2px solid var(--accent);
-        }
-
-        .complete-check {
-            color: var(--accent);
-            font-size: 1.5rem;
-            margin-right: 10px;
-        }
-
-        .rest-timer {
-            background: rgba(255,209,102,0.1);
-            border: 2px solid var(--warning);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            margin: 15px 0;
-        }
-
-        .rest-time {
-            font-size: 2rem;
-            font-family: 'Orbitron', sans-serif;
-            color: var(--warning);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
         }
 
         @media (max-width: 768px) {
@@ -346,6 +465,59 @@
                 flex-wrap: wrap;
             }
         }
+
+        /* Пульсирующая анимация для уведомлений */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Анимация появления элементов */
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        /* Стили для модального окна достижений */
+        .achievement-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+
+        .achievement-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .achievement-content {
+            background: linear-gradient(135deg, var(--card-dark), #1c2128);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            transform: scale(0.8);
+            transition: transform 0.5s;
+        }
+
+        .achievement-modal.active .achievement-content {
+            transform: scale(1);
+        }
     </style>
 </head>
 <body>
@@ -354,17 +526,27 @@
     <div id="landing-page">
         <section class="hero">
             <div class="container position-relative">
-                <h1 class="mb-4">FIT to ME</h1>
+                <h1 class="pulse">FIT to ME</h1>
                 <p class="lead fs-3">Твой личный фитнес-трекер</p>
                 <p class="fs-5 mb-5">Бесплатно. Без рекламы. Для всех.</p>
                 <button class="btn btn-accent btn-lg" id="start-button">Рассчитать программу</button>
+                
+                <!-- Анимированные элементы -->
+                <div class="position-absolute top-0 start-0 w-100 h-100" style="pointer-events: none; z-index: 1;">
+                    <div class="position-absolute" style="top: 20%; left: 10%; animation: float 6s infinite ease-in-out;">
+                        <div class="text-accent opacity-25"><i class="bi bi-dumbbell fs-1"></i></div>
+                    </div>
+                    <div class="position-absolute" style="top: 60%; right: 15%; animation: float 8s infinite ease-in-out 1s;">
+                        <div class="text-accent opacity-25"><i class="bi bi-heart-pulse fs-1"></i></div>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
 
     <!-- Личный кабинет -->
     <div id="dashboard" style="display: none;">
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNavbar">
             <div class="container">
                 <a class="navbar-brand logo-font" href="#"><i class="bi bi-activity me-2"></i>FitToMe</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -385,32 +567,100 @@
         <div class="container mt-5 pt-5">
             <!-- Обзор -->
             <section id="overview" class="section">
-                <h2>Привет, <span id="user-name-display" class="text-accent"></span>!</h2>
-                <p class="lead mb-5">Добро пожаловать в ваш персональный фитнес-центр</p>
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <h2>Привет, <span id="user-name-display" class="text-accent"></span>!</h2>
+                        <p class="lead">Добро пожаловать в ваш персональный фитнес-центр</p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <div class="streak-counter">
+                            <i class="bi bi-fire"></i>
+                            <span id="streak-days">7</span> дней подряд
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Мотивационная цитата -->
+                <div class="motivation-quote">
+                    <p id="daily-quote">Спорт — это не просто упражнения, это стиль жизни.</p>
+                    <small>- Ваша мотивация на сегодня</small>
+                </div>
+
+                <!-- Основные показатели -->
                 <div class="row g-4 mb-5">
                     <div class="col-md-4">
-                        <div class="card-custom text-center">
+                        <div class="card-custom stats-card">
                             <h5><i class="bi bi-fire me-2"></i>Рекомендуемые калории</h5>
                             <h3 id="target-calories">—</h3>
                             <p class="text-muted">в день</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card-custom text-center">
-                            <h5><i class="bi bi-speedometer2 me-2"></i>Текущий вес</h5>
-                            <h3 id="current-weight-display">— кг</h3>
-                            <div class="mt-3">
-                                <input type="number" class="form-control" id="update-weight" placeholder="Новый вес" step="0.1" min="30" max="300">
-                                <button class="btn btn-accent mt-2 w-100" onclick="updateWeight()">Обновить</button>
+                            <div class="progress mt-3" style="height: 8px;">
+                                <div class="progress-bar bg-accent" id="calorie-progress" style="width: 65%"></div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card-custom text-center">
+                        <div class="card-custom stats-card">
+                            <h5><i class="bi bi-speedometer2 me-2"></i>Текущий вес</h5>
+                            <h3 id="current-weight-display">— кг</h3>
+                            <div class="input-group mt-3">
+                                <input type="number" class="form-control" id="update-weight" placeholder="Новый вес" step="0.1" min="30" max="300">
+                                <button class="btn btn-accent" onclick="updateWeight()">Обновить</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-custom stats-card">
                             <h5><i class="bi bi-graph-up me-2"></i>Индекс массы тела</h5>
-                            <h3 id="bmi-display">—</h3>
-                            <div id="bmi-status" class="badge bg-secondary mt-2"></div>
+                            <div class="progress-ring mx-auto mt-3">
+                                <svg class="progress-ring-circle" width="100" height="100">
+                                    <circle class="progress-ring-bg" cx="50" cy="50" r="45"></circle>
+                                    <circle class="progress-ring-fill" cx="50" cy="50" r="45" id="bmi-circle"></circle>
+                                </svg>
+                                <div class="progress-text" id="bmi-text">—</div>
+                            </div>
+                            <div id="bmi-status" class="mt-3"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Водный баланс -->
+                <div class="card-custom mb-4">
+                    <h4><i class="bi bi-droplet me-2"></i>Водный баланс</h4>
+                    <p>Выпейте достаточно воды сегодня</p>
+                    <div class="water-tracker">
+                        <div class="water-drop" onclick="toggleWaterDrop(this)"></div>
+                        <div class="water-drop" onclick="toggleWaterDrop(this)"></div>
+                        <div class="water-drop" onclick="toggleWaterDrop(this)"></div>
+                        <div class="water-drop" onclick="toggleWaterDrop(this)"></div>
+                        <div class="water-drop" onclick="toggleWaterDrop(this)"></div>
+                        <div class="water-drop" onclick="toggleWaterDrop(this)"></div>
+                        <div class="water-drop" onclick="toggleWaterDrop(this)"></div>
+                        <div class="water-drop" onclick="toggleWaterDrop(this)"></div>
+                    </div>
+                    <div class="mt-3 text-muted">Цель: 8 стаканов (2 литра)</div>
+                </div>
+
+                <!-- Достижения -->
+                <div class="card-custom">
+                    <h4><i class="bi bi-trophy me-2"></i>Ваши достижения</h4>
+                    <div class="row text-center mt-4">
+                        <div class="col-4">
+                            <div class="achievement-badge">
+                                <i class="bi bi-star-fill"></i>
+                            </div>
+                            <div>Первая тренировка</div>
+                        </div>
+                        <div class="col-4">
+                            <div class="achievement-badge">
+                                <i class="bi bi-check2-circle"></i>
+                            </div>
+                            <div>Неделя без пропусков</div>
+                        </div>
+                        <div class="col-4">
+                            <div class="achievement-badge">
+                                <i class="bi bi-lightning"></i>
+                            </div>
+                            <div>Энерджайзер</div>
                         </div>
                     </div>
                 </div>
@@ -421,6 +671,34 @@
                 <h2 class="mb-4"><i class="bi bi-egg-fried me-2"></i>Твой план питания</h2>
                 <div class="card-custom">
                     <div id="nutrition-plan-display"></div>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h5>Примерный рацион на день:</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item bg-transparent text-light border-secondary">Завтрак: Овсянка с ягодами</li>
+                                <li class="list-group-item bg-transparent text-light border-secondary">Перекус: Греческий йогурт</li>
+                                <li class="list-group-item bg-transparent text-light border-secondary">Обед: Куриная грудка с овощами</li>
+                                <li class="list-group-item bg-transparent text-light border-secondary">Ужин: Рыба с салатом</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Рекомендации по времени:</h5>
+                            <div class="timeline mt-3">
+                                <div class="timeline-item">
+                                    <div class="timeline-time">8:00</div>
+                                    <div class="timeline-content">Завтрак</div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-time">12:00</div>
+                                    <div class="timeline-content">Обед</div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-time">18:00</div>
+                                    <div class="timeline-content">Ужин</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -439,17 +717,10 @@
                     </div>
                 </div>
 
-                <!-- Таймер отдыха -->
-                <div class="rest-timer" id="rest-timer" style="display: none;">
-                    <h5><i class="bi bi-clock me-2"></i>Отдых между подходами</h5>
-                    <div class="rest-time" id="rest-time">60</div>
-                    <button class="btn btn-accent mt-2" onclick="skipRest()">Пропустить отдых</button>
-                </div>
-
                 <!-- Программа тренировок -->
                 <div class="card-custom mb-4">
                     <h4><i class="bi bi-calendar-week me-2"></i>Программа на неделю</h4>
-                    <div class="row" id="weekly-plan"></div>
+                    <div id="weekly-plan"></div>
                 </div>
 
                 <!-- Список упражнений -->
@@ -461,6 +732,48 @@
                 <h2 class="mb-4"><i class="bi bi-bar-chart me-2"></i>Ваш прогресс</h2>
                 <div class="card-custom">
                     <canvas id="weight-chart" height="300"></canvas>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h5>Статистика тренировок</h5>
+                            <div class="mt-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Завершено тренировок</span>
+                                    <span class="text-accent">12</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Средняя длительность</span>
+                                    <span class="text-accent">45 мин</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Сожжено калорий</span>
+                                    <span class="text-accent">8,450</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Цели на месяц</h5>
+                            <div class="mt-3">
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Потеря веса</span>
+                                        <span>3/5 кг</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-accent" style="width: 60%"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Тренировок</span>
+                                        <span>8/12</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-info" style="width: 67%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
@@ -524,6 +837,18 @@
         </div>
     </div>
 
+    <!-- Модальное окно достижений -->
+    <div class="achievement-modal" id="achievementModal">
+        <div class="achievement-content">
+            <div class="achievement-badge mx-auto" style="width: 80px; height: 80px;">
+                <i class="bi bi-trophy fs-2"></i>
+            </div>
+            <h3 class="mt-4 text-accent">Достижение разблокировано!</h3>
+            <p id="achievement-text">Первая тренировка завершена</p>
+            <button class="btn btn-accent mt-4" onclick="closeAchievement()">Продолжить</button>
+        </div>
+    </div>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
@@ -534,154 +859,57 @@
         let timerInterval = null;
         let timerSeconds = 0;
         let timerRunning = false;
-        let restTimerInterval = null;
-        let restSeconds = 60;
-        let completedExercises = JSON.parse(localStorage.getItem('completedExercises')) || [];
-
-        // Все рабочие изображения с Unsplash
-        const exerciseImages = {
-            'Приседания': 'https://images.unsplash.com/photo-1534367507877-0edd93bd013b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'Отжимания': 'https://images.unsplash.com/photo-1598974357801-cbca100e5d10?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'Подтягивания': 'https://images.unsplash.com/photo-1549060279-7e168fce7090?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'Планка': 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'Берпи': 'https://images.unsplash.com/photo-1598974357801-cbca100e5d10?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'Жим штанги лежа': 'https://images.unsplash.com/photo-1541534741688-6078c520bf7d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'Тяга штанги': 'https://images.unsplash.com/photo-1534367507877-0edd93bd013b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'Разводка гантелей': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'Сгибания рук': 'https://images.unsplash.com/photo-1598974357801-cbca100e5d10?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'Бег': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'Выпады': 'https://images.unsplash.com/photo-1549060279-7e168fce7090?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'Скручивания': 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'Подъем ног': 'https://images.unsplash.com/photo-1598974357801-cbca100e5d10?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'Велосипед': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            'Мост': 'https://images.unsplash.com/photo-1534367507877-0edd93bd013b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-        };
-
-        const workoutPlans = {
+        let workoutPlans = {
             loss: {
                 name: "Программа для похудения",
-                description: "Интервальные тренировки для сжигания жира",
                 days: [
                     {
                         day: "День 1: Кардио + Силовая",
                         exercises: [
                             {
-                                name: "Бег",
-                                image: exerciseImages['Бег'],
-                                description: "Бег средней интенсивности для сжигания калорий. Идеально для кардио-нагрузки.",
-                                sets: "1 подход",
+                                name: "Бег на беговой дорожке",
+                                image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                                description: "Бег средней интенсивности для сжигания калорий",
+                                sets: "1",
                                 reps: "20-30 минут",
-                                difficulty: "beginner",
+                                difficulty: "Средняя",
                                 muscles: ["Ноги", "Сердечно-сосудистая система"],
-                                tips: "Поддерживайте темп, при котором вы можете говорить, но не петь",
-                                rest: "60 секунд",
-                                video: "https://www.youtube.com/embed/1T1UO7xICb8"
+                                tips: "Поддерживайте темп, при котором вы можете говорить, но не петь"
                             },
                             {
                                 name: "Приседания",
-                                image: exerciseImages['Приседания'],
-                                description: "Базовое упражнение для ног и ягодиц. Отлично сжигает калории.",
-                                sets: "3 подхода",
-                                reps: "15-20 повторений",
-                                difficulty: "beginner",
+                                image: "https://images.unsplash.com/photo-1536922246289-88c42f957773?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                                description: "Базовое упражнение для ног и ягодиц",
+                                sets: "3",
+                                reps: "12-15 повторений",
+                                difficulty: "Начальная",
                                 muscles: ["Квадрицепсы", "Ягодицы", "Бицепсы бедра"],
-                                tips: "Следите за тем, чтобы колени не выходили за носки",
-                                rest: "90 секунд",
-                                video: "https://www.youtube.com/embed/aclHkVaku9U"
-                            },
-                            {
-                                name: "Берпи",
-                                image: exerciseImages['Берпи'],
-                                description: "Функциональное упражнение на все тело. Одно из лучших для жиросжигания.",
-                                sets: "4 подхода",
-                                reps: "10-15 повторений",
-                                difficulty: "intermediate",
-                                muscles: ["Все тело"],
-                                tips: "Сохраняйте быстрый темп, но контролируйте движения",
-                                rest: "60 секунд",
-                                video: "https://www.youtube.com/embed/auBLPXO8Fww"
+                                tips: "Следите за тем, чтобы колени не выходили за носки"
                             }
                         ]
                     },
                     {
-                        day: "День 2: Верх тела + Кардио",
+                        day: "День 2: Верх тела",
                         exercises: [
                             {
                                 name: "Отжимания",
-                                image: exerciseImages['Отжимания'],
-                                description: "Упражнение для груди, плеч и трицепсов. Можно выполнять с колен для начинающих.",
-                                sets: "3 подхода",
+                                image: "https://images.unsplash.com/photo-1598974357801-cbca100e5d10?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                                description: "Упражнение для груди, плеч и трицепсов",
+                                sets: "3",
                                 reps: "10-15 повторений",
-                                difficulty: "beginner",
+                                difficulty: "Начальная",
                                 muscles: ["Грудь", "Плечи", "Трицепсы"],
-                                tips: "Держите тело прямым, не прогибайтесь в пояснице",
-                                rest: "90 секунд",
-                                video: "https://www.youtube.com/embed/IODxDxX7oi4"
+                                tips: "Держите тело прямым, не прогибайтесь в пояснице"
                             },
                             {
-                                name: "Планка",
-                                image: exerciseImages['Планка'],
-                                description: "Статическое упражнение для кора. Укрепляет мышцы пресса и спины.",
-                                sets: "3 подхода",
-                                reps: "30-60 секунд",
-                                difficulty: "beginner",
-                                muscles: ["Пресс", "Спина", "Плечи"],
-                                tips: "Держите тело прямым, не опускайте таз",
-                                rest: "60 секунд",
-                                video: "https://www.youtube.com/embed/pSHjTRCQxIw"
-                            },
-                            {
-                                name: "Скручивания",
-                                image: exerciseImages['Скручивания'],
-                                description: "Изолирующее упражнение для пресса. Эффективно для проработки мышц кора.",
-                                sets: "3 подхода",
-                                reps: "20-25 повторений",
-                                difficulty: "beginner",
-                                muscles: ["Прямая мышца живота"],
-                                tips: "Не тяните шею руками, работайте мышцами пресса",
-                                rest: "45 секунд",
-                                video: "https://www.youtube.com/embed/Xyd_fa5zoEU"
-                            }
-                        ]
-                    },
-                    {
-                        day: "День 3: HIIT Тренировка",
-                        exercises: [
-                            {
-                                name: "Выпады",
-                                image: exerciseImages['Выпады'],
-                                description: "Упражнение для ног с акцентом на квадрицепсы и ягодицы.",
-                                sets: "4 подхода",
-                                reps: "12-15 повторений на каждую ногу",
-                                difficulty: "beginner",
-                                muscles: ["Квадрицепсы", "Ягодицы"],
-                                tips: "Переднее колено не должно выходить за носок",
-                                rest: "60 секунд",
-                                video: "https://www.youtube.com/embed/QOVaHwm-Q6U"
-                            },
-                            {
-                                name: "Велосипед",
-                                image: exerciseImages['Велосипед'],
-                                description: "Упражнение для косых мышц пресса и общей выносливости.",
-                                sets: "3 подхода",
-                                reps: "20-30 повторений на каждую сторону",
-                                difficulty: "intermediate",
-                                muscles: ["Косые мышцы живота", "Прямая мышца живота"],
-                                tips: "Сосредоточьтесь на скручивании корпуса, а не на скорости",
-                                rest: "45 секунд",
-                                video: "https://www.youtube.com/embed/9FGilxCbdz8"
-                            },
-                            {
-                                name: "Мост",
-                                image: exerciseImages['Мост'],
-                                description: "Упражнение для ягодиц и задней поверхности бедра.",
-                                sets: "4 подхода",
-                                reps: "15-20 повторений",
-                                difficulty: "beginner",
-                                muscles: ["Ягодицы", "Бицепсы бедра"],
-                                tips: "В верхней точке сжимайте ягодицы",
-                                rest: "60 секунд",
-                                video: "https://www.youtube.com/embed/4qWDf9GfETw"
+                                name: "Подтягивания",
+                                image: "https://images.unsplash.com/photo-1549060279-7e168fce7090?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                                description: "Лучшее упражнение для спины",
+                                sets: "3",
+                                reps: "8-12 повторений",
+                                difficulty: "Продвинутая",
+                                muscles: ["Спина", "Бицепсы"],
+                                tips: "Если тяжело, используйте резиновые петли для помощи"
                             }
                         ]
                     }
@@ -689,87 +917,29 @@
             },
             gain: {
                 name: "Программа для набора массы",
-                description: "Силовые тренировки для роста мышц",
                 days: [
                     {
                         day: "День 1: Грудь и Трицепс",
                         exercises: [
                             {
                                 name: "Жим штанги лежа",
-                                image: exerciseImages['Жим штанги лежа'],
-                                description: "Король упражнений для грудных мышц. Базовое движение для массы.",
-                                sets: "4 подхода",
+                                image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                                description: "Король упражнений для грудных мышц",
+                                sets: "4",
                                 reps: "8-10 повторений",
-                                difficulty: "intermediate",
+                                difficulty: "Средняя",
                                 muscles: ["Грудь", "Плечи", "Трицепсы"],
-                                tips: "Опускайте штангу медленно, поднимайте мощно",
-                                rest: "120 секунд",
-                                video: "https://www.youtube.com/embed/rT7DgCr-3pg"
+                                tips: "Опускайте штангу медленно, поднимайте мощно"
                             },
                             {
                                 name: "Разводка гантелей",
-                                image: exerciseImages['Разводка гантелей'],
-                                description: "Изолирующее упражнение для грудных мышц. Улучшает форму груди.",
-                                sets: "3 подхода",
+                                image: "https://images.unsplash.com/photo-1534367507877-0edd93bd013b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                                description: "Изолирующее упражнение для грудных",
+                                sets: "3",
                                 reps: "12-15 повторений",
-                                difficulty: "beginner",
+                                difficulty: "Начальная",
                                 muscles: ["Грудь"],
-                                tips: "Слегка сгибайте руки в локтях, не используйте инерцию",
-                                rest: "90 секунд",
-                                video: "https://www.youtube.com/embed/8Djz42j8SB0"
-                            },
-                            {
-                                name: "Отжимания на брусьях",
-                                image: exerciseImages['Отжимания'],
-                                description: "Отличное упражнение для трицепсов и нижней части груди.",
-                                sets: "3 подхода",
-                                reps: "8-12 повторений",
-                                difficulty: "intermediate",
-                                muscles: ["Трицепсы", "Грудь"],
-                                tips: "Наклон корпуса вперед смещает нагрузку на грудь",
-                                rest: "90 секунд",
-                                video: "https://www.youtube.com/embed/2z8JmcrW-As"
-                            }
-                        ]
-                    },
-                    {
-                        day: "День 2: Спина и Бицепс",
-                        exercises: [
-                            {
-                                name: "Тяга штанги",
-                                image: exerciseImages['Тяга штанги'],
-                                description: "Базовое упражнение для толщины спины.",
-                                sets: "4 подхода",
-                                reps: "8-10 повторений",
-                                difficulty: "intermediate",
-                                muscles: ["Широчайшие", "Трапеции", "Бицепсы"],
-                                tips: "Держите спину прямой, тяните штангу к поясу",
-                                rest: "120 секунд",
-                                video: "https://www.youtube.com/embed/9efgcAjQe7E"
-                            },
-                            {
-                                name: "Подтягивания",
-                                image: exerciseImages['Подтягивания'],
-                                description: "Лучшее упражнение для ширины спины.",
-                                sets: "4 подхода",
-                                reps: "6-10 повторений",
-                                difficulty: "intermediate",
-                                muscles: ["Широчайшие", "Бицепсы"],
-                                tips: "Если тяжело, используйте резиновые петли для помощи",
-                                rest: "120 секунд",
-                                video: "https://www.youtube.com/embed/eGo4IYlbE5g"
-                            },
-                            {
-                                name: "Сгибания рук",
-                                image: exerciseImages['Сгибания рук'],
-                                description: "Изолирующее упражнение для бицепсов.",
-                                sets: "3 подхода",
-                                reps: "10-12 повторений",
-                                difficulty: "beginner",
-                                muscles: ["Бицепсы"],
-                                tips: "Не раскачивайте корпус, работайте только руками",
-                                rest: "60 секунд",
-                                video: "https://www.youtube.com/embed/sAq_ocpRh_I"
+                                tips: "Слегка сгибайте руки в локтях"
                             }
                         ]
                     }
@@ -777,46 +947,29 @@
             },
             maintain: {
                 name: "Программа для поддержания формы",
-                description: "Сбалансированные тренировки для тонуса",
                 days: [
                     {
                         day: "День 1: Full Body",
                         exercises: [
                             {
                                 name: "Берпи",
-                                image: exerciseImages['Берпи'],
-                                description: "Функциональное упражнение на все тело для поддержания формы.",
-                                sets: "3 подхода",
+                                image: "https://images.unsplash.com/photo-1598974357801-cbca100e5d10?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                                description: "Функциональное упражнение на все тело",
+                                sets: "4",
                                 reps: "10-12 повторений",
-                                difficulty: "intermediate",
+                                difficulty: "Высокая",
                                 muscles: ["Все тело"],
-                                tips: "Сохраняйте средний темп, контролируйте каждое движение",
-                                rest: "60 секунд",
-                                video: "https://www.youtube.com/embed/auBLPXO8Fww"
+                                tips: "Сохраняйте быстрый темп, но контролируйте движения"
                             },
                             {
                                 name: "Планка",
-                                image: exerciseImages['Планка'],
-                                description: "Статическое упражнение для кора и стабильности.",
-                                sets: "3 подхода",
-                                reps: "30-45 секунд",
-                                difficulty: "beginner",
+                                image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                                description: "Статическое упражнение для кора",
+                                sets: "3",
+                                reps: "30-60 секунд",
+                                difficulty: "Средняя",
                                 muscles: ["Пресс", "Спина", "Плечи"],
-                                tips: "Держите тело прямым, дышите равномерно",
-                                rest: "45 секунд",
-                                video: "https://www.youtube.com/embed/pSHjTRCQxIw"
-                            },
-                            {
-                                name: "Приседания",
-                                image: exerciseImages['Приседания'],
-                                description: "Базовое упражнение для поддержания тонуса ног.",
-                                sets: "3 подхода",
-                                reps: "15-20 повторений",
-                                difficulty: "beginner",
-                                muscles: ["Квадрицепсы", "Ягодицы"],
-                                tips: "Контролируйте движение вниз и вверх",
-                                rest: "60 секунд",
-                                video: "https://www.youtube.com/embed/aclHkVaku9U"
+                                tips: "Держите тело прямым, не опускайте таз"
                             }
                         ]
                     }
@@ -843,12 +996,13 @@
                     
                     if (section === 'workouts') {
                         loadWorkouts();
-                    } else if (section === 'progress') {
-                        updateChart();
                     }
                 };
             });
 
+            // Загрузка приветственной цитаты
+            loadDailyQuote();
+            
             // Автологин
             if (localStorage.getItem('userData')) {
                 userData = JSON.parse(localStorage.getItem('userData'));
@@ -857,6 +1011,16 @@
                 document.getElementById('dashboard').style.display = 'block';
                 loadDashboard();
             }
+
+            // Скролл навбара
+            window.addEventListener('scroll', function() {
+                const navbar = document.getElementById('mainNavbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
         });
 
         function hideForm() {
@@ -890,6 +1054,11 @@
             document.getElementById('quiz-form-overlay').style.display = 'none';
 
             loadDashboard();
+            
+            // Показать достижение
+            setTimeout(() => {
+                showAchievement("Добро пожаловать в FitToMe!");
+            }, 1000);
         }
 
         function loadDashboard() {
@@ -904,14 +1073,11 @@
                          : userData.goal === 'gain' ? Math.round(tdee + 500)
                          : Math.round(tdee);
 
-            document.getElementById('target-calories').textContent = target.toLocaleString() + ' ккал';
-            document.getElementById('current-weight-display').textContent = userData.weight.toFixed(1) + ' кг';
+            document.getElementById('target-calories').textContent = target.toLocaleString();
+            document.getElementById('current-weight-display').textContent = userData.weight.toFixed(1);
 
             // Обновление BMI
             updateBMI();
-
-            // Загрузка питания
-            loadNutrition();
 
             // Загрузка тренировок
             loadWorkouts();
@@ -922,47 +1088,39 @@
 
         function updateBMI() {
             const bmi = (userData.weight / ((userData.height / 100) ** 2)).toFixed(1);
-            document.getElementById('bmi-display').textContent = bmi;
+            const bmiCircle = document.getElementById('bmi-circle');
+            const bmiText = document.getElementById('bmi-text');
+            const bmiStatus = document.getElementById('bmi-status');
+            
+            bmiText.textContent = bmi;
             
             let status = '';
             let statusClass = '';
+            let progress = 0;
+            
             if (bmi < 18.5) {
                 status = 'Недостаточный вес';
-                statusClass = 'bg-info';
+                statusClass = 'text-info';
+                progress = (bmi / 18.5) * 100;
             } else if (bmi < 25) {
                 status = 'Нормальный вес';
-                statusClass = 'bg-success';
+                statusClass = 'text-accent';
+                progress = ((bmi - 18.5) / 6.5) * 100;
             } else if (bmi < 30) {
                 status = 'Избыточный вес';
-                statusClass = 'bg-warning';
+                statusClass = 'text-warning';
+                progress = ((bmi - 25) / 5) * 100;
             } else {
                 status = 'Ожирение';
-                statusClass = 'bg-danger';
+                statusClass = 'text-danger';
+                progress = Math.min(((bmi - 30) / 10) * 100, 100);
             }
             
-            document.getElementById('bmi-status').textContent = status;
-            document.getElementById('bmi-status').className = `badge ${statusClass} mt-2`;
-        }
-
-        function loadNutrition() {
-            let nutritionHTML = '<h5>Основные принципы:</h5><ul class="list-group list-group-flush">';
-            if (userData.goal === 'loss') {
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Дефицит калорий: 500 ккал/день</li>';
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Белок: 1.8–2.2 г на кг веса</li>';
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Овощи в каждый прием пищи</li>';
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Пить 2-3 литра воды в день</li>';
-            } else if (userData.goal === 'gain') {
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Профицит калорий: 500 ккал/день</li>';
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Белок: 2 г на кг веса</li>';
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Сложные углеводы для энергии</li>';
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Здоровые жиры: орехи, авокадо</li>';
-            } else {
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Поддержание баланса калорий</li>';
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Сбалансированное БЖУ</li>';
-                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Регулярное питание 3-5 раз в день</li>';
-            }
-            nutritionHTML += '</ul>';
-            document.getElementById('nutrition-plan-display').innerHTML = nutritionHTML;
+            const circumference = 2 * Math.PI * 45;
+            const offset = circumference - (progress / 100) * circumference;
+            bmiCircle.style.strokeDashoffset = offset;
+            
+            bmiStatus.innerHTML = `<span class="${statusClass}">${status}</span>`;
         }
 
         function loadWorkouts() {
@@ -973,102 +1131,73 @@
             if (!plan) return;
             
             // Загрузка недельного плана
-            let weeklyHTML = '';
+            let weeklyHTML = '<div class="row">';
             plan.days.forEach((day, index) => {
-                const completedCount = day.exercises.filter(ex => 
-                    completedExercises.includes(`${day.day}-${ex.name}`)
-                ).length;
-                const totalCount = day.exercises.length;
-                const progress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
-                
                 weeklyHTML += `
                     <div class="col-md-4 mb-3">
-                        <div class="card-custom ${completedCount === totalCount ? 'workout-complete' : ''}">
+                        <div class="card-custom">
                             <h6>${day.day}</h6>
                             <p class="small text-muted">${day.exercises.length} упражнения</p>
-                            <div class="progress mb-2" style="height: 8px;">
-                                <div class="progress-bar bg-accent" style="width: ${progress}%"></div>
-                            </div>
-                            <small>Выполнено: ${completedCount}/${totalCount}</small>
-                            <button class="btn btn-sm btn-accent mt-2 w-100" onclick="showDay(${index})">
-                                ${completedCount === totalCount ? 'Повторить' : 'Начать'}
-                            </button>
+                            <button class="btn btn-sm btn-accent" onclick="showDay(${index})">Начать</button>
                         </div>
                     </div>
                 `;
             });
+            weeklyHTML += '</div>';
             weeklyPlan.innerHTML = weeklyHTML;
             
             // Загрузка упражнений
             container.innerHTML = '';
             plan.days.forEach((day, dayIndex) => {
                 const dayHTML = `
-                    <div class="workout-day fade-in" id="day-${dayIndex}" ${dayIndex > 0 ? 'style="display:none;"' : ''}>
+                    <div class="workout-day fade-in">
                         <div class="day-header">
                             <h4 class="day-title">${day.day}</h4>
                             <span class="completion-badge">${day.exercises.length} упражнений</span>
                         </div>
                         <div class="row">
-                            ${day.exercises.map((exercise, exIndex) => {
-                                const isCompleted = completedExercises.includes(`${day.day}-${exercise.name}`);
-                                const difficultyClass = `difficulty-${exercise.difficulty}`;
-                                const difficultyText = exercise.difficulty === 'beginner' ? 'Начальный' : 
-                                                     exercise.difficulty === 'intermediate' ? 'Средний' : 'Продвинутый';
-                                
-                                return `
-                                    <div class="col-md-6 mb-4">
-                                        <div class="exercise-card position-relative ${isCompleted ? 'workout-complete' : ''}">
-                                            <span class="difficulty-badge ${difficultyClass}">${difficultyText}</span>
-                                            <img src="${exercise.image}" alt="${exercise.name}" class="exercise-img">
-                                            <div class="exercise-content">
-                                                ${isCompleted ? '<div class="complete-check"><i class="bi bi-check-circle-fill"></i> Выполнено</div>' : ''}
-                                                <h5 class="exercise-title">${exercise.name}</h5>
-                                                <p>${exercise.description}</p>
-                                                <div class="exercise-meta">
-                                                    <div class="meta-item">
-                                                        <i class="bi bi-arrow-repeat"></i>
-                                                        <span>${exercise.sets}</span>
-                                                    </div>
-                                                    <div class="meta-item">
-                                                        <i class="bi bi-activity"></i>
-                                                        <span>${exercise.reps}</span>
-                                                    </div>
-                                                    <div class="meta-item">
-                                                        <i class="bi bi-clock"></i>
-                                                        <span>Отдых: ${exercise.rest}</span>
-                                                    </div>
+                            ${day.exercises.map((exercise, exIndex) => `
+                                <div class="col-md-6 mb-4">
+                                    <div class="exercise-card position-relative">
+                                        <span class="sticker">${exercise.difficulty}</span>
+                                        <img src="${exercise.image}" alt="${exercise.name}" class="exercise-img">
+                                        <div class="exercise-content">
+                                            <h5 class="exercise-title">${exercise.name}</h5>
+                                            <p>${exercise.description}</p>
+                                            <div class="exercise-meta">
+                                                <div class="meta-item">
+                                                    <i class="bi bi-arrow-repeat"></i>
+                                                    <span>${exercise.sets} подхода</span>
                                                 </div>
-                                                <div class="mb-3">
-                                                    <strong>Работающие мышцы:</strong>
-                                                    <div class="mt-1">
-                                                        ${exercise.muscles.map(muscle => 
-                                                            `<span class="badge bg-dark me-1 mb-1">${muscle}</span>`
-                                                        ).join('')}
-                                                    </div>
+                                                <div class="meta-item">
+                                                    <i class="bi bi-activity"></i>
+                                                    <span>${exercise.reps}</span>
                                                 </div>
-                                                <div class="alert alert-dark">
-                                                    <i class="bi bi-lightbulb"></i>
-                                                    <strong>Совет:</strong> ${exercise.tips}
+                                            </div>
+                                            <div class="mb-3">
+                                                <strong>Работающие мышцы:</strong>
+                                                <div class="mt-1">
+                                                    ${exercise.muscles.map(muscle => 
+                                                        `<span class="badge bg-dark me-1">${muscle}</span>`
+                                                    ).join('')}
                                                 </div>
-                                                <div class="video-container">
-                                                    <button class="btn btn-sm btn-outline-light w-100" onclick="toggleVideo(this, '${exercise.video}')">
-                                                        <i class="bi bi-play-circle me-2"></i> Показать технику
-                                                    </button>
-                                                    <iframe class="workout-video" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                                </div>
-                                                <div class="d-flex gap-2 mt-3">
-                                                    <button class="btn btn-accent flex-grow-1" onclick="completeExercise('${day.day}', '${exercise.name}', ${dayIndex}, ${exIndex})">
-                                                        ${isCompleted ? '<i class="bi bi-arrow-clockwise me-2"></i>Выполнить снова' : '<i class="bi bi-check-circle me-2"></i>Выполнить'}
-                                                    </button>
-                                                    <button class="btn btn-outline-light" onclick="startRestTimer(${exercise.rest.replace(' секунд', '').replace(' секунды', '').replace(' секунда', '')})">
-                                                        <i class="bi bi-clock"></i>
-                                                    </button>
-                                                </div>
+                                            </div>
+                                            <div class="alert alert-dark">
+                                                <i class="bi bi-lightbulb"></i>
+                                                <strong>Совет:</strong> ${exercise.tips}
+                                            </div>
+                                            <div class="d-flex gap-2">
+                                                <button class="btn btn-sm btn-accent" onclick="startExercise('${exercise.name}')">
+                                                    <i class="bi bi-play-circle"></i> Начать
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-light" onclick="showExerciseDetail('${exercise.name}')">
+                                                    <i class="bi bi-info-circle"></i> Детали
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
-                                `;
-                            }).join('')}
+                                </div>
+                            `).join('')}
                         </div>
                     </div>
                 `;
@@ -1077,51 +1206,22 @@
         }
 
         function showDay(dayIndex) {
-            document.querySelectorAll('.workout-day').forEach(day => {
-                day.style.display = 'none';
+            const sections = document.querySelectorAll('.workout-day');
+            sections.forEach((section, index) => {
+                if (index === dayIndex) {
+                    section.style.display = 'block';
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
             });
-            document.getElementById(`day-${dayIndex}`).style.display = 'block';
-            document.getElementById(`day-${dayIndex}`).scrollIntoView({ behavior: 'smooth' });
         }
 
-        function toggleVideo(button, videoUrl) {
-            const videoContainer = button.parentElement;
-            const iframe = videoContainer.querySelector('.workout-video');
-            const isVisible = iframe.style.display === 'block';
-            
-            if (isVisible) {
-                iframe.style.display = 'none';
-                iframe.src = '';
-                button.innerHTML = '<i class="bi bi-play-circle me-2"></i> Показать технику';
-            } else {
-                iframe.style.display = 'block';
-                iframe.src = videoUrl;
-                button.innerHTML = '<i class="bi bi-x-circle me-2"></i> Скрыть видео';
-            }
+        function startExercise(exerciseName) {
+            showNotification(`Начинаем упражнение: ${exerciseName}`);
+            startTimer();
         }
 
-        function completeExercise(dayName, exerciseName, dayIndex, exIndex) {
-            const key = `${dayName}-${exerciseName}`;
-            const index = completedExercises.indexOf(key);
-            
-            if (index === -1) {
-                completedExercises.push(key);
-                showNotification(`Упражнение "${exerciseName}" выполнено!`);
-            } else {
-                completedExercises.splice(index, 1);
-                showNotification(`Упражнение "${exerciseName}" сброшено`);
-            }
-            
-            localStorage.setItem('completedExercises', JSON.stringify(completedExercises));
-            
-            // Перезагружаем тренировки для обновления состояния
-            loadWorkouts();
-            
-            // Запускаем таймер отдыха
-            const plan = workoutPlans[userData.goal];
-            const exercise = plan.days[dayIndex].exercises[exIndex];
-            const restTime = parseInt(exercise.rest.replace(' секунд', '').replace(' секунды', '').replace(' секунда', ''));
-            startRestTimer(restTime);
+        function showExerciseDetail(exerciseName) {
+            alert(`Детальная информация об упражнении: ${exerciseName}\n\nЗдесь будет подробная техника выполнения с видео и фото.`);
         }
 
         // Таймер тренировки
@@ -1154,31 +1254,6 @@
             clearInterval(timerInterval);
             timerSeconds = 0;
             document.getElementById('workout-timer').textContent = '00:00';
-        }
-
-        // Таймер отдыха
-        function startRestTimer(seconds) {
-            restSeconds = seconds;
-            document.getElementById('rest-timer').style.display = 'block';
-            document.getElementById('rest-time').textContent = restSeconds;
-            
-            clearInterval(restTimerInterval);
-            restTimerInterval = setInterval(() => {
-                restSeconds--;
-                document.getElementById('rest-time').textContent = restSeconds;
-                
-                if (restSeconds <= 0) {
-                    clearInterval(restTimerInterval);
-                    document.getElementById('rest-timer').style.display = 'none';
-                    showNotification('Отдых завершен! Продолжаем тренировку!');
-                }
-            }, 1000);
-        }
-
-        function skipRest() {
-            clearInterval(restTimerInterval);
-            document.getElementById('rest-timer').style.display = 'none';
-            showNotification('Отдых пропущен!');
         }
 
         function updateChart() {
@@ -1215,6 +1290,11 @@
                                 color: 'white',
                                 font: { size: 14 }
                             }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleColor: '#00ff88',
+                            bodyColor: 'white'
                         }
                     },
                     scales: {
@@ -1261,9 +1341,26 @@
             updateBMI();
             updateChart();
             showNotification('Вес успешно обновлен!');
+            
+            // Показать достижение если прогресс
+            if (userData.goal === 'loss' && newWeight < userData.weight) {
+                showAchievement("Отличный прогресс! Вес снижается!");
+            }
+        }
+
+        function toggleWaterDrop(element) {
+            element.classList.toggle('filled');
+            const filled = document.querySelectorAll('.water-drop.filled').length;
+            
+            if (filled === 8) {
+                showAchievement("Отличная гидратация! Все стаканы воды выпиты!");
+            }
+            
+            showNotification(`Выпито ${filled} из 8 стаканов воды`);
         }
 
         function showNotification(message) {
+            // Создаем уведомление
             const notification = document.createElement('div');
             notification.className = 'position-fixed bottom-0 end-0 m-3 p-3 bg-success text-white rounded';
             notification.style.zIndex = '1000';
@@ -1283,6 +1380,39 @@
             }, 3000);
         }
 
+        function showAchievement(text) {
+            const modal = document.getElementById('achievementModal');
+            document.getElementById('achievement-text').textContent = text;
+            modal.classList.add('active');
+            
+            // Автоматическое скрытие через 5 секунд
+            setTimeout(() => {
+                modal.classList.remove('active');
+            }, 5000);
+        }
+
+        function closeAchievement() {
+            document.getElementById('achievementModal').classList.remove('active');
+        }
+
+        function loadDailyQuote() {
+            const quotes = [
+                "Спорт — это не просто упражнения, это стиль жизни.",
+                "Каждая тренировка приближает тебя к цели.",
+                "Сила не в мышцах, а в силе воли.",
+                "Твое тело может всё. Нужно только убедить в этом разум.",
+                "Не важно, как медленно ты продвигаешься. Главное — ты не останавливаешься.",
+                "Сегодняшняя боль — завтрашняя сила.",
+                "Тренировка — это праздник, на который ты приглашаешь свое тело.",
+                "Лучшая инвестиция — инвестиция в себя.",
+                "Не бойся начинать заново. Бойся остановиться.",
+                "Успех — это сумма маленьких усилий, повторяемых изо дня в день."
+            ];
+            
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('daily-quote').textContent = randomQuote;
+        }
+
         function logout() {
             if (confirm('Вы уверены, что хотите выйти?')) {
                 pauseTimer();
@@ -1290,6 +1420,53 @@
                 location.reload();
             }
         }
+
+        // Плавающая анимация для декоративных элементов
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-20px); }
+            }
+            
+            .timeline {
+                position: relative;
+                padding-left: 30px;
+            }
+            
+            .timeline::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 2px;
+                background: var(--accent);
+            }
+            
+            .timeline-item {
+                position: relative;
+                margin-bottom: 20px;
+            }
+            
+            .timeline-item::before {
+                content: '';
+                position: absolute;
+                left: -34px;
+                top: 5px;
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: var(--accent);
+            }
+            
+            .timeline-time {
+                font-weight: bold;
+                color: var(--accent);
+                margin-bottom: 5px;
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
-</html> 
+</html>
