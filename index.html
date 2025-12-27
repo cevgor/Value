@@ -3,168 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitToMe — Твой персональный фитнес дома</title>
+    <title>FitToMe — Онлайн-фитнес дома</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Google Fonts: Modern sans-serif -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Современные и женственные -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
-    <!-- Animate.css -->
+    <!-- Animate.css для анимаций -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         body {
-            background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
             font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(to bottom, #fff, #f8f9fa);
             color: #333;
         }
 
-        h1, h2, h3, h4 {
+        h1, h2, h3, h4, h5 {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
         }
 
         .hero {
-            background: url('https://via.placeholder.com/1920x800?text=Фитнес+Дома') no-repeat center center/cover;
-            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://img.freepik.com/premium-photo/woman-training-home-girl-doing-exercises_231834-2614.jpg') no-repeat center center/cover;
+            height: 90vh;
             display: flex;
             align-items: center;
             text-align: center;
             color: white;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
         }
 
-        .hero-overlay {
-            background: rgba(0,0,0,0.4);
-            padding: 50px;
-            border-radius: 20px;
-        }
-
-        .card-program {
-            border: none;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-
-        .card-program:hover {
-            transform: translateY(-10px);
+        .hero h1 {
+            font-size: 4rem;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
 
         .btn-primary {
-            background: #ff69b4; /* Розовый акцент как в женских фитнес-сайтах */
+            background: #ff69b4;
             border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            transition: all 0.3s;
         }
 
         .btn-primary:hover {
             background: #ff1493;
+            transform: scale(1.05);
         }
 
-        .testimonial-carousel .carousel-item {
-            text-align: center;
-            padding: 20px;
+        .program-card {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
         }
 
-        .testimonial-photo {
-            width: 100px;
-            height: 100px;
+        .program-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .program-card img {
+            height: 300px;
             object-fit: cover;
+        }
+
+        .testimonial {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .testimonial img {
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
+            object-fit: cover;
         }
     </style>
 </head>
 <body>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero animate__animated animate__fadeIn">
         <div class="container">
-            <div class="hero-overlay animate__animated animate__fadeIn">
-                <h1 class="display-3">Тренируйся не выходя из дома</h1>
-                <p class="lead">Персональная программа похудения, оздоровления и хорошего настроения</p>
-                <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#calculator-modal">Рассчитать программу</button>
-            </div>
+            <h1>FIT to ME</h1>
+            <p class="lead fs-3">Онлайн-платформа для фитнеса у тебя в кармане</p>
+            <p class="fs-4">Тренируйся, не выходя из дома</p>
+            <p class="mb-4">Проект профессионалов: комплексное похудение, оздоровление и хорошее настроение 💕</p>
+            <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#quiz-modal">Подобрать программу</button>
         </div>
     </section>
 
-    <!-- Programs -->
-    <section class="container my-5">
-        <h2 class="text-center mb-5">Выбери направление</h2>
-        <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="card-program animate__animated animate__fadeInUp">
-                    <img src="https://via.placeholder.com/400x300?text=Похудение" class="card-img-top">
-                    <div class="card-body">
+    <!-- Программы -->
+    <section class="container my-5 animate__animated animate__fadeInUp">
+        <h2 class="text-center mb-5">Выбери подходящее направление</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="program-card">
+                    <img src="https://static.ua-football.com/img/upload/20/28dc90.jpeg" alt="Похудение">
+                    <div class="card-body text-center p-4">
                         <h5>Похудение</h5>
-                        <p>Эффективные тренировки для сжигания жира дома</p>
+                        <p>Эффективные тренировки для сжигания жира и красивой фигуры 🔥</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card-program animate__animated animate__fadeInUp">
-                    <img src="https://via.placeholder.com/400x300?text=Силовые" class="card-img-top">
-                    <div class="card-body">
+            <div class="col-md-4">
+                <div class="program-card">
+                    <img src="https://s.fitstars.ru/FSimageresizecache/app/uploads/public/654/c9f/551/654c9f55141bb311435246.jpg" alt="Силовые">
+                    <div class="card-body text-center p-4">
                         <h5>Силовые</h5>
-                        <p>Набор мышечной массы и тонус</p>
+                        <p>Тонус, сила и рельеф тела 💪</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="card-program animate__animated animate__fadeInUp">
-                    <img src="https://via.placeholder.com/400x300?text=Растяжка" class="card-img-top">
-                    <div class="card-body">
+            <div class="col-md-4">
+                <div class="program-card">
+                    <img src="https://ac-t.ru/upload/resize_cache/iblock/124/600_400_2/1244422c9e7df7fa86ab2a2bebd1cae3.jpg" alt="Гибкость">
+                    <div class="card-body text-center p-4">
                         <h5>Гибкость и растяжка</h5>
-                        <p>Шпагат, здоровая спина</p>
+                        <p>Шпагат, здоровая спина и грация 🦢</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Calculator Modal -->
-    <div class="modal fade" id="calculator-modal">
+    <!-- Отзывы -->
+    <section class="container my-5 animate__animated animate__fadeInUp">
+        <h2 class="text-center mb-5">Результаты наших девушек</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="testimonial text-center">
+                    <img src="https://img.championat.com/s/732x488/news/big/v/m/zhenskaja-sushka-do-pi-posle-lichnyj-opyt_1578330229328865162.jpg" alt="До/после">
+                    <p class="mt-3">"Минус 15 кг за 4 месяца! Энергия зашкаливает 💕"</p>
+                    <strong>Елена</strong>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial text-center">
+                    <img src="https://img.championat.com/c/1200x900/news/big/r/d/kak-fitnes-bloger-pohudela-i-nakachalas_15847100592045841166.jpg" alt="До/после">
+                    <p class="mt-3">"Тело изменилось невероятно! Спасибо команде 🔥"</p>
+                    <strong>Юлия</strong>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial text-center">
+                    <img src="https://i.pinimg.com/736x/91/e3/e6/91e3e661f8d291e72e0f579dc7a57ee3.jpg" alt="До/после">
+                    <p class="mt-3">"Минус 27 кг за полгода. Я счастлива! 😍"</p>
+                    <strong>Ася</strong>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Модальное окно с опросом -->
+    <div class="modal fade" id="quiz-modal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5>Рассчитай свою программу</h5>
+                    <h5 class="modal-title">Подбери свою программу</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="calc-form" class="row g-3">
-                        <!-- Поля ввода как в предыдущих версиях -->
-                        <div class="col-md-6"><input type="text" class="form-control" placeholder="Имя" id="name"></div>
-                        <!-- ... другие поля ... -->
-                        <div class="col-12"><button type="button" class="btn btn-primary" onclick="calculateAndShow()">Рассчитать</button></div>
+                    <form id="quiz-form">
+                        <div class="mb-3">
+                            <label class="form-label">Твоё имя</label>
+                            <input type="text" class="form-control" id="name">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Возраст</label>
+                            <input type="number" class="form-control" id="age">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Рост (см)</label>
+                            <input type="number" class="form-control" id="height">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Вес (кг)</label>
+                            <input type="number" class="form-control" id="weight">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Твоя цель</label>
+                            <select class="form-select" id="goal">
+                                <option>Похудеть</option>
+                                <option>Подтянуть тело</option>
+                                <option>Набрать мышечную массу</option>
+                                <option>Улучшить гибкость</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-primary w-100" onclick="showResult()">Подобрать</button>
                     </form>
-                    <div id="calc-results" class="mt-4"></div>
+                    <div id="quiz-result" class="mt-4 d-none">
+                        <div class="alert alert-success">
+                            <h5>Твоя персональная программа готова!</h5>
+                            <p>На основе твоих данных мы рекомендуем программу <strong>Похудение + Тонус</strong>. Ожидаемый результат: минус 5-10 кг за 3 месяца при регулярных тренировках 💪</p>
+                            <button class="btn btn-primary">Оформить подписку</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Testimonials -->
-    <section class="container my-5">
-        <h2 class="text-center mb-5">Отзывы</h2>
-        <div id="testimonial-carousel" class="carousel slide">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <p>"Минус 15 кг за 4 месяца!"</p>
-                    <img src="https://via.placeholder.com/100" class="testimonial-photo">
-                </div>
-                <!-- Больше отзывов -->
-            </div>
-        </div>
-    </section>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Функции расчёта, сохранения, трекинга из предыдущих версий
-        // Добавь модальное окно с вводом данных и персональными рекомендациями по программам
+        function showResult() {
+            document.getElementById('quiz-form').classList.add('d-none');
+            document.getElementById('quiz-result').classList.remove('d-none');
+        }
     </script>
 </body>
 </html>
