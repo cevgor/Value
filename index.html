@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitToMe — Онлайн-фитнес дома</title>
+    <title>FitToMe — Бесплатный онлайн-фитнес дома</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -41,47 +41,82 @@
         }
 
         .btn-primary {
-            background: #ff69b4;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
             border: none;
             padding: 15px 30px;
             font-size: 1.2rem;
             border-radius: 50px;
             transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255,105,180,0.5);
         }
 
         .btn-primary:hover {
-            background: #ff1493;
+            background: linear-gradient(45deg, #ff1493, #ff69b4);
             transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255,20,147,0.6);
         }
 
         .program-card {
-            border-radius: 20px;
+            border-radius: 25px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            background: white;
         }
 
         .program-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-15px);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.2);
         }
 
         .program-card img {
-            height: 300px;
+            height: 350px;
             object-fit: cover;
+            filter: brightness(1.05);
+            transition: transform 0.3s;
+        }
+
+        .program-card:hover img {
+            transform: scale(1.05);
         }
 
         .testimonial {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: linear-gradient(to bottom, #fff, #f8f9fa);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .testimonial:hover {
+            transform: translateY(-10px);
         }
 
         .testimonial img {
-            width: 80px;
-            height: 80px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             object-fit: cover;
+            border: 5px solid #ff69b4;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 50px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: #ff69b4;
+            border-radius: 2px;
         }
     </style>
 </head>
@@ -91,16 +126,16 @@
     <section class="hero animate__animated animate__fadeIn">
         <div class="container">
             <h1>FIT to ME</h1>
-            <p class="lead fs-3">Онлайн-платформа для фитнеса у тебя в кармане</p>
-            <p class="fs-4">Тренируйся, не выходя из дома</p>
-            <p class="mb-4">Проект профессионалов: комплексное похудение, оздоровление и хорошее настроение 💕</p>
+            <p class="lead fs-3">Твоя бесплатная платформа для фитнеса</p>
+            <p class="fs-4">Тренируйся дома бесплатно</p>
+            <p class="mb-4">Комплексные программы: похудение, оздоровление, тонус и хорошее настроение 💕</p>
             <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#quiz-modal">Подобрать программу</button>
         </div>
     </section>
 
     <!-- Программы -->
     <section class="container my-5 animate__animated animate__fadeInUp">
-        <h2 class="text-center mb-5">Выбери подходящее направление</h2>
+        <h2 class="text-center section-title">Выбери направление</h2>
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="program-card">
@@ -134,7 +169,7 @@
 
     <!-- Отзывы -->
     <section class="container my-5 animate__animated animate__fadeInUp">
-        <h2 class="text-center mb-5">Результаты наших девушек</h2>
+        <h2 class="text-center section-title">Результаты наших девушек</h2>
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="testimonial text-center">
@@ -146,7 +181,7 @@
             <div class="col-md-4">
                 <div class="testimonial text-center">
                     <img src="https://img.championat.com/c/1200x900/news/big/r/d/kak-fitnes-bloger-pohudela-i-nakachalas_15847100592045841166.jpg" alt="До/после">
-                    <p class="mt-3">"Тело изменилось невероятно! Спасибо команде 🔥"</p>
+                    <p class="mt-3">"Тело изменилось невероятно! Спасибо программе 🔥"</p>
                     <strong>Юлия</strong>
                 </div>
             </div>
@@ -160,48 +195,80 @@
         </div>
     </section>
 
-    <!-- Модальное окно с опросом -->
+    <!-- Модальное окно с опросом и результатами -->
     <div class="modal fade" id="quiz-modal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Подбери свою программу</h5>
+                    <h5 class="modal-title">Подбери свою бесплатную программу</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="quiz-form">
-                        <div class="mb-3">
-                            <label class="form-label">Твоё имя</label>
-                            <input type="text" class="form-control" id="name">
+                    <div id="quiz-form">
+                        <form>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Имя</label>
+                                    <input type="text" class="form-control" id="name" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Возраст (лет)</label>
+                                    <input type="number" class="form-control" id="age" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Пол</label>
+                                    <select class="form-select" id="gender" required>
+                                        <option value="female">Женский</option>
+                                        <option value="male">Мужской</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Рост (см)</label>
+                                    <input type="number" class="form-control" id="height" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Вес (кг)</label>
+                                    <input type="number" class="form-control" id="weight" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Уровень активности</label>
+                                    <select class="form-select" id="activity" required>
+                                        <option value="1.2">Сидячий образ жизни</option>
+                                        <option value="1.375">Лёгкая активность</option>
+                                        <option value="1.55">Умеренная</option>
+                                        <option value="1.725">Высокая</option>
+                                        <option value="1.9">Очень высокая</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Цель</label>
+                                    <select class="form-select" id="goal" required>
+                                        <option value="loss">Похудение</option>
+                                        <option value="gain">Набор мышц</option>
+                                        <option value="flex">Гибкость и растяжка</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-primary w-100" onclick="calculateProgram()">Рассчитать программу</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="quiz-result" class="d-none">
+                        <h4 class="text-center mb-4">Твоя персональная программа</h4>
+                        <div id="calc-summary" class="alert alert-info mb-4"></div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Рекомендованная программа тренировок</h5>
+                                <div id="workout-plan"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Программа питания</h5>
+                                <div id="nutrition-plan"></div>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Возраст</label>
-                            <input type="number" class="form-control" id="age">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Рост (см)</label>
-                            <input type="number" class="form-control" id="height">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Вес (кг)</label>
-                            <input type="number" class="form-control" id="weight">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Твоя цель</label>
-                            <select class="form-select" id="goal">
-                                <option>Похудеть</option>
-                                <option>Подтянуть тело</option>
-                                <option>Набрать мышечную массу</option>
-                                <option>Улучшить гибкость</option>
-                            </select>
-                        </div>
-                        <button type="button" class="btn btn-primary w-100" onclick="showResult()">Подобрать</button>
-                    </form>
-                    <div id="quiz-result" class="mt-4 d-none">
-                        <div class="alert alert-success">
-                            <h5>Твоя персональная программа готова!</h5>
-                            <p>На основе твоих данных мы рекомендуем программу <strong>Похудение + Тонус</strong>. Ожидаемый результат: минус 5-10 кг за 3 месяца при регулярных тренировках 💪</p>
-                            <button class="btn btn-primary">Оформить подписку</button>
+                        <div class="mt-4 text-center">
+                            <button class="btn btn-primary" onclick="resetQuiz()">Вернуться к вводу данных</button>
                         </div>
                     </div>
                 </div>
@@ -212,9 +279,121 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        function showResult() {
+        function calculateProgram() {
+            const name = document.getElementById('name').value || 'Девушка';
+            const age = parseFloat(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const activity = parseFloat(document.getElementById('activity').value);
+            const goal = document.getElementById('goal').value;
+
+            if (!age || !height || !weight) {
+                alert('Пожалуйста, заполните все поля');
+                return;
+            }
+
+            // Расчёт BMR, TDEE, калорий
+            let bmr;
+            if (gender === 'male') {
+                bmr = 66.5 + (13.75 * weight) + (5.003 * height) - (6.75 * age);
+            } else {
+                bmr = 655.1 + (9.563 * weight) + (1.850 * height) - (4.676 * age);
+            }
+            const tdee = bmr * activity;
+            let recommendedCalories;
+            if (goal === 'loss') recommendedCalories = tdee - 500;
+            else if (goal === 'gain') recommendedCalories = tdee + 500;
+            else recommendedCalories = tdee;
+
+            const bmi = weight / ((height / 100) ** 2);
+            const bmiStatus = bmi < 18.5 ? 'недовес' : bmi < 25 ? 'норма' : bmi < 30 ? 'избыток' : 'ожирение';
+
+            document.getElementById('calc-summary').innerHTML = `
+                <p>Привет, ${name}! Твой BMI: ${bmi.toFixed(1)} (${bmiStatus}).</p>
+                <p>BMR: ${bmr.toFixed(0)} ккал. TDEE: ${tdee.toFixed(0)} ккал.</p>
+                <p>Рекомендуемые калории: ${recommendedCalories.toFixed(0)} ккал/день для ${goal === 'loss' ? 'похудения' : goal === 'gain' ? 'набора мышц' : 'гибкости'}.</p>
+            `;
+
+            // Программы тренировок из интернета (адаптированные примеры)
+            let workoutPlan = '';
+            if (goal === 'loss') {
+                workoutPlan = `
+                    <ul>
+                        <li>День 1: Кардио + пресс (30 мин бега на месте, 3 сета планки по 1 мин).</li>
+                        <li>День 2: Нижняя часть тела (приседания 4x15, выпады 3x10 на ногу).</li>
+                        <li>День 3: Верхняя часть (отжимания 3x10, подъёмы рук 4x15).</li>
+                        <li>День 4: Отдых или йога.</li>
+                        <li>Повторять 4-5 раз в неделю. Источник: fitness.ru</li>
+                    </ul>
+                `;
+            } else if (goal === 'gain') {
+                workoutPlan = `
+                    <ul>
+                        <li>День 1: Грудь и спина (отжимания 4x12, подтягивания 3x8).</li>
+                        <li>День 2: Ноги (приседания 4x15, икры 3x20).</li>
+                        <li>День 3: Руки и плечи (подъёмы гантелей 4x12, пресс 3x15).</li>
+                        <li>День 4: Отдых.</li>
+                        <li>Тренировки 3-4 раза в неделю. Источник: bodybuilding.com</li>
+                    </ul>
+                `;
+            } else {
+                workoutPlan = `
+                    <ul>
+                        <li>День 1: Растяжка ног (наклоны, шпагат 20 мин).</li>
+                        <li>День 2: Спина и плечи (кошка-корова, круги плечами 15 мин).</li>
+                        <li>День 3: Полная растяжка (йога-позы 30 мин).</li>
+                        <li>Ежедневно 15-30 мин. Источник: yoga.ru</li>
+                    </ul>
+                `;
+            }
+            document.getElementById('workout-plan').innerHTML = workoutPlan;
+
+            // Программы питания (примеры из интернета)
+            let nutritionPlan = '';
+            if (goal === 'loss') {
+                nutritionPlan = `
+                    <p>Диета 1500 ккал/день:</p>
+                    <ul>
+                        <li>Завтрак: Овсянка с ягодами (300 ккал).</li>
+                        <li>Обед: Курица с овощами (400 ккал).</li>
+                        <li>Ужин: Рыба с салатом (400 ккал).</li>
+                        <li>Перекусы: Йогурт, фрукты (400 ккал).</li>
+                        <li>Источник: diet.ru</li>
+                    </ul>
+                `;
+            } else if (goal === 'gain') {
+                nutritionPlan = `
+                    <p>Диета 2500 ккал/день:</p>
+                    <ul>
+                        <li>Завтрак: Яйца с авокадо (600 ккал).</li>
+                        <li>Обед: Стейк с рисом (700 ккал).</li>
+                        <li>Ужин: Творог с орехами (600 ккал).</li>
+                        <li>Перекусы: Протеин, бананы (600 ккал).</li>
+                        <li>Источник: menshealth.ru</li>
+                    </ul>
+                `;
+            } else {
+                nutritionPlan = `
+                    <p>Балансированная диета:</p>
+                    <ul>
+                        <li>Завтрак: Смузи с фруктами (400 ккал).</li>
+                        <li>Обед: Салат с курицей (500 ккал).</li>
+                        <li>Ужин: Овощи с рыбой (500 ккал).</li>
+                        <li>Перекусы: Орехи (300 ккал).</li>
+                        <li>Источник: healthline.com</li>
+                    </ul>
+                `;
+            }
+            document.getElementById('nutrition-plan').innerHTML = nutritionPlan;
+
             document.getElementById('quiz-form').classList.add('d-none');
             document.getElementById('quiz-result').classList.remove('d-none');
+        }
+
+        function resetQuiz() {
+            document.getElementById('quiz-form').classList.remove('d-none');
+            document.getElementById('quiz-result').classList.add('d-none');
         }
     </script>
 </body>
