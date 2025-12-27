@@ -24,6 +24,7 @@
             --text-light: #c9d1d9;
             --accent: #00ff88;
             --accent-hover: #00cc6a;
+            --danger: #ff6b6b;
         }
 
         body {
@@ -49,7 +50,7 @@
         }
 
         .hero h1 {
-            font-size: 4.5rem;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
             text-shadow: 0 0 20px var(--accent);
         }
 
@@ -58,7 +59,7 @@
             color: #000;
             font-weight: bold;
             border: none;
-            padding: 15px 40px;
+            padding: 12px 30px;
             border-radius: 50px;
             box-shadow: 0 0 20px rgba(0,255,136,0.5);
             transition: all 0.3s;
@@ -73,13 +74,15 @@
         }
 
         .navbar-dark {
-            background: #161b22 !important;
+            background: rgba(22, 27, 34, 0.95) !important;
+            backdrop-filter: blur(10px);
             border-bottom: 1px solid #30363d;
         }
 
         .nav-link {
             color: var(--text-light) !important;
             font-weight: 500;
+            transition: color 0.3s;
         }
 
         .nav-link.active {
@@ -92,13 +95,15 @@
             border: 1px solid #30363d;
             border-radius: 15px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            padding: 20px;
+            padding: 25px;
+            height: 100%;
         }
 
         .form-control, .form-select {
             background-color: #161b22;
             border: 1px solid #30363d;
             color: white;
+            transition: border-color 0.3s;
         }
 
         .form-control:focus, .form-select:focus {
@@ -110,6 +115,12 @@
 
         .section {
             display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         #overview {
@@ -124,21 +135,76 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.95);
-            z-index: 1000;
+            z-index: 2000;
             align-items: center;
             justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .weight-form {
+            margin-top: 30px;
+            padding: 20px;
+            border-top: 1px solid #30363d;
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 0.875rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .stats-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stats-card h3 {
+            font-size: 2.5rem;
+            margin: 15px 0;
+            color: var(--accent);
+        }
+
+        .bmi-status {
+            font-size: 0.9rem;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .bmi-underweight { background: #3498db; }
+        .bmi-normal { background: var(--accent); color: #000; }
+        .bmi-overweight { background: #f39c12; }
+        .bmi-obese { background: var(--danger); }
+
+        @media (max-width: 768px) {
+            .hero {
+                height: 80vh;
+                padding-top: 60px;
+            }
+            
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            
+            .card-custom {
+                padding: 15px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Главная страница (hero) -->
+    <!-- Главная страница -->
     <div id="landing-page">
         <section class="hero">
             <div class="container position-relative">
                 <h1>FIT to ME</h1>
-                <p class="lead fs-2">Твой личный фитнес-трекер</p>
-                <p class="fs-4 mb-5">Бесплатно. Без рекламы. Для всех.</p>
+                <p class="lead fs-3">Твой личный фитнес-трекер</p>
+                <p class="fs-5 mb-5">Бесплатно. Без рекламы. Для всех.</p>
                 <button class="btn btn-accent btn-lg" id="start-button">Рассчитать программу</button>
             </div>
         </section>
@@ -148,14 +214,17 @@
     <div id="dashboard" style="display: none;">
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
             <div class="container">
-                <a class="navbar-brand" href="#">FitToMe</a>
-                <div class="collapse navbar-collapse">
+                <a class="navbar-brand" href="#"><i class="bi bi-activity me-2"></i>FitToMe</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link active" href="#" data-section="overview">Обзор</a></li>
                         <li class="nav-item"><a class="nav-link" href="#" data-section="nutrition">Питание</a></li>
                         <li class="nav-item"><a class="nav-link" href="#" data-section="workouts">Тренировки</a></li>
                         <li class="nav-item"><a class="nav-link" href="#" data-section="progress">Прогресс</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#" onclick="logout()">Выйти</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" onclick="logout()"><i class="bi bi-box-arrow-right me-1"></i>Выйти</a></li>
                     </ul>
                 </div>
             </div>
@@ -164,82 +233,141 @@
         <div class="container mt-5 pt-5">
             <section id="overview" class="section">
                 <h2 class="text-center mb-5">Привет, <span id="user-name-display"></span>!</h2>
-                <div class="row g-4">
+                <div class="row g-4 mb-5">
                     <div class="col-md-4">
-                        <div class="card-custom text-center">
-                            <h5>Рекомендуемые калории</h5>
+                        <div class="card-custom stats-card">
+                            <h5><i class="bi bi-fire me-2"></i>Рекомендуемые калории</h5>
                             <h3 id="target-calories">—</h3>
+                            <p class="text-muted">в день</p>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card-custom text-center">
-                            <h5>Текущий вес</h5>
+                        <div class="card-custom stats-card">
+                            <h5><i class="bi bi-speedometer2 me-2"></i>Текущий вес</h5>
                             <h3 id="current-weight-display">— кг</h3>
+                            <div class="weight-form">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="update-weight" placeholder="Новый вес" step="0.1" min="30" max="300">
+                                    <button class="btn btn-accent" onclick="updateWeight()">Обновить</button>
+                                </div>
+                                <div class="error-message" id="weight-error"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card-custom text-center">
-                            <h5>BMI</h5>
+                        <div class="card-custom stats-card">
+                            <h5><i class="bi bi-graph-up me-2"></i>Индекс массы тела</h5>
                             <h3 id="bmi-display">—</h3>
+                            <div id="bmi-status" class="bmi-status"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card-custom">
+                            <h4><i class="bi bi-cup-hot me-2"></i>Рекомендации по питанию</h4>
+                            <div id="nutrition-tips"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-custom">
+                            <h4><i class="bi bi-heart-pulse me-2"></i>Рекомендации по тренировкам</h4>
+                            <div id="workout-tips"></div>
                         </div>
                     </div>
                 </div>
             </section>
 
             <section id="nutrition" class="section">
-                <h2 class="mb-4">Твой план питания</h2>
-                <div id="nutrition-plan-display" class="card-custom"></div>
+                <h2 class="mb-4"><i class="bi bi-egg-fried me-2"></i>Твой план питания</h2>
+                <div class="card-custom">
+                    <div id="nutrition-plan-display"></div>
+                    <div class="mt-4" id="nutrition-details"></div>
+                </div>
             </section>
 
             <section id="workouts" class="section">
-                <h2 class="mb-4">Твоя программа тренировок</h2>
-                <div id="workout-plan-display" class="card-custom"></div>
+                <h2 class="mb-4"><i class="bi bi-person-walking me-2"></i>Твоя программа тренировок</h2>
+                <div class="card-custom">
+                    <div id="workout-plan-display"></div>
+                    <div class="mt-4" id="workout-details"></div>
+                </div>
             </section>
 
             <section id="progress" class="section">
-                <h2 class="mb-4">График веса</h2>
-                <canvas id="weight-chart" height="300"></canvas>
+                <h2 class="mb-4"><i class="bi bi-bar-chart me-2"></i>График веса</h2>
+                <div class="card-custom">
+                    <canvas id="weight-chart" height="300"></canvas>
+                    <div class="mt-4 text-center">
+                        <button class="btn btn-accent" onclick="exportData()"><i class="bi bi-download me-2"></i>Экспорт данных</button>
+                        <button class="btn btn-outline-light ms-2" onclick="clearHistory()"><i class="bi bi-trash me-2"></i>Очистить историю</button>
+                    </div>
+                </div>
             </section>
         </div>
     </div>
 
-    <!-- Форма ввода данных (overlay) -->
+    <!-- Форма ввода данных -->
     <div id="quiz-form-overlay">
         <div class="card bg-dark text-light p-4" style="width: 90%; max-width: 600px;">
+            <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" onclick="hideForm()"></button>
             <h3 class="text-center mb-4">Рассчитай свою программу</h3>
             <div class="row g-3">
-                <div class="col-md-6"><input type="text" class="form-control" placeholder="Имя" id="name"></div>
-                <div class="col-md-6"><input type="number" class="form-control" placeholder="Возраст" id="age"></div>
                 <div class="col-md-6">
+                    <label class="form-label">Имя</label>
+                    <input type="text" class="form-control" placeholder="Ваше имя" id="name">
+                    <div class="error-message" id="name-error"></div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Возраст</label>
+                    <input type="number" class="form-control" placeholder="Возраст" id="age" min="16" max="100">
+                    <div class="error-message" id="age-error"></div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Пол</label>
                     <select class="form-select" id="gender">
-                        <option value="" disabled selected>Пол</option>
+                        <option value="" disabled selected>Выберите пол</option>
                         <option value="male">Мужской</option>
                         <option value="female">Женский</option>
                     </select>
+                    <div class="error-message" id="gender-error"></div>
                 </div>
-                <div class="col-md-6"><input type="number" class="form-control" placeholder="Рост (см)" id="height"></div>
-                <div class="col-md-6"><input type="number" class="form-control" placeholder="Вес (кг)" id="weight"></div>
                 <div class="col-md-6">
+                    <label class="form-label">Рост (см)</label>
+                    <input type="number" class="form-control" placeholder="Рост" id="height" min="100" max="250">
+                    <div class="error-message" id="height-error"></div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Вес (кг)</label>
+                    <input type="number" class="form-control" placeholder="Вес" id="weight" step="0.1" min="30" max="300">
+                    <div class="error-message" id="weight-input-error"></div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Уровень активности</label>
                     <select class="form-select" id="activity">
-                        <option value="" disabled selected>Активность</option>
-                        <option value="1.2">Сидячий</option>
-                        <option value="1.375">Лёгкая</option>
-                        <option value="1.55">Умеренная</option>
-                        <option value="1.725">Высокая</option>
-                        <option value="1.9">Очень высокая</option>
+                        <option value="" disabled selected>Выберите активность</option>
+                        <option value="1.2">Сидячий образ жизни</option>
+                        <option value="1.375">Лёгкая активность (1-3 раза в неделю)</option>
+                        <option value="1.55">Умеренная активность (3-5 раз в неделю)</option>
+                        <option value="1.725">Высокая активность (6-7 раз в неделю)</option>
+                        <option value="1.9">Очень высокая активность (профессиональный спорт)</option>
                     </select>
+                    <div class="error-message" id="activity-error"></div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-12">
+                    <label class="form-label">Цель</label>
                     <select class="form-select" id="goal">
-                        <option value="" disabled selected>Цель</option>
+                        <option value="" disabled selected>Выберите цель</option>
                         <option value="loss">Похудение</option>
-                        <option value="gain">Набор мышц</option>
+                        <option value="gain">Набор мышечной массы</option>
                         <option value="maintain">Поддержание формы</option>
                     </select>
+                    <div class="error-message" id="goal-error"></div>
                 </div>
                 <div class="col-12 text-center mt-4">
-                    <button class="btn btn-accent btn-lg px-5" onclick="enterDashboard()">Рассчитать и войти</button>
-                    <button class="btn btn-secondary mt-2" onclick="hideForm()">Отмена</button>
+                    <button class="btn btn-accent btn-lg px-5" onclick="validateAndEnter()">Рассчитать и войти</button>
+                    <button class="btn btn-outline-light mt-2 ms-2" onclick="hideForm()">Отмена</button>
                 </div>
             </div>
         </div>
@@ -260,6 +388,20 @@
 
         function hideForm() {
             document.getElementById('quiz-form-overlay').style.display = 'none';
+            clearErrors();
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.style.display = 'none';
+                el.textContent = '';
+            });
+        }
+
+        function showError(elementId, message) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.style.display = 'block';
         }
 
         // Навигация
@@ -271,24 +413,76 @@
                 document.getElementById(section).style.display = 'block';
                 document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
                 this.classList.add('active');
+                
+                // Обновляем график при переходе в прогресс
+                if (section === 'progress') {
+                    updateChart();
+                }
             };
         });
+
+        function validateAndEnter() {
+            clearErrors();
+            let isValid = true;
+
+            const name = document.getElementById('name').value.trim();
+            const age = parseInt(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const activity = document.getElementById('activity').value;
+            const goal = document.getElementById('goal').value;
+
+            if (!name) {
+                showError('name-error', 'Введите имя');
+                isValid = false;
+            }
+
+            if (!age || age < 16 || age > 100) {
+                showError('age-error', 'Введите возраст от 16 до 100 лет');
+                isValid = false;
+            }
+
+            if (!gender) {
+                showError('gender-error', 'Выберите пол');
+                isValid = false;
+            }
+
+            if (!height || height < 100 || height > 250) {
+                showError('height-error', 'Введите рост от 100 до 250 см');
+                isValid = false;
+            }
+
+            if (!weight || weight < 30 || weight > 300) {
+                showError('weight-input-error', 'Введите вес от 30 до 300 кг');
+                isValid = false;
+            }
+
+            if (!activity) {
+                showError('activity-error', 'Выберите уровень активности');
+                isValid = false;
+            }
+
+            if (!goal) {
+                showError('goal-error', 'Выберите цель');
+                isValid = false;
+            }
+
+            if (isValid) {
+                enterDashboard();
+            }
+        }
 
         function enterDashboard() {
             userData = {
                 name: document.getElementById('name').value.trim() || 'Тренирующийся',
-                age: parseFloat(document.getElementById('age').value),
+                age: parseInt(document.getElementById('age').value),
                 gender: document.getElementById('gender').value,
                 height: parseFloat(document.getElementById('height').value),
                 weight: parseFloat(document.getElementById('weight').value),
                 activity: parseFloat(document.getElementById('activity').value),
                 goal: document.getElementById('goal').value
             };
-
-            if (!userData.age || !userData.height || !userData.weight || !userData.gender || !userData.activity || !userData.goal) {
-                alert('Заполните все поля!');
-                return;
-            }
 
             localStorage.setItem('userData', JSON.stringify(userData));
 
@@ -304,6 +498,72 @@
             loadDashboard();
         }
 
+        function updateWeight() {
+            const newWeight = parseFloat(document.getElementById('update-weight').value);
+            if (!newWeight || newWeight < 30 || newWeight > 300) {
+                document.getElementById('weight-error').textContent = 'Введите корректный вес (30-300 кг)';
+                document.getElementById('weight-error').style.display = 'block';
+                return;
+            }
+
+            userData.weight = newWeight;
+            localStorage.setItem('userData', JSON.stringify(userData));
+
+            const today = new Date().toISOString().split('T')[0];
+            weightHistory[today] = newWeight;
+            localStorage.setItem('weightHistory', JSON.stringify(weightHistory));
+
+            document.getElementById('current-weight-display').textContent = newWeight.toFixed(1) + ' кг';
+            document.getElementById('update-weight').value = '';
+            document.getElementById('weight-error').style.display = 'none';
+
+            // Обновляем BMI
+            updateBMI();
+            
+            // Обновляем график
+            updateChart();
+            
+            // Показываем уведомление
+            showNotification('Вес успешно обновлен!');
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'position-fixed bottom-0 end-0 m-3 p-3 bg-success text-white rounded';
+            notification.style.zIndex = '1000';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function updateBMI() {
+            const bmi = (userData.weight / ((userData.height / 100) ** 2)).toFixed(1);
+            document.getElementById('bmi-display').textContent = bmi;
+            
+            let status = '';
+            let statusClass = '';
+            if (bmi < 18.5) {
+                status = 'Недостаточный вес';
+                statusClass = 'bmi-underweight';
+            } else if (bmi < 25) {
+                status = 'Нормальный вес';
+                statusClass = 'bmi-normal';
+            } else if (bmi < 30) {
+                status = 'Избыточный вес';
+                statusClass = 'bmi-overweight';
+            } else {
+                status = 'Ожирение';
+                statusClass = 'bmi-obese';
+            }
+            
+            const statusEl = document.getElementById('bmi-status');
+            statusEl.textContent = status;
+            statusEl.className = `bmi-status ${statusClass}`;
+        }
+
         function loadDashboard() {
             document.getElementById('user-name-display').textContent = userData.name;
 
@@ -316,29 +576,108 @@
                          : userData.goal === 'gain' ? Math.round(tdee + 500)
                          : Math.round(tdee);
 
-            document.getElementById('target-calories').textContent = target + ' ккал/день';
-            document.getElementById('current-weight-display').textContent = userData.weight + ' кг';
+            document.getElementById('target-calories').textContent = target.toLocaleString() + ' ккал';
+            document.getElementById('current-weight-display').textContent = userData.weight.toFixed(1) + ' кг';
 
-            const bmi = (userData.weight / ((userData.height / 100) ** 2)).toFixed(1);
-            document.getElementById('bmi-display').textContent = bmi;
+            updateBMI();
 
             // Питание
-            let nutritionHTML = '<ul>';
-            if (userData.goal === 'loss') nutritionHTML += '<li>Дефицит 500 ккал</li><li>Белок 1.8–2.2 г/кг</li><li>Больше овощей</li>';
-            else if (userData.goal === 'gain') nutritionHTML += '<li>Профицит 500 ккал</li><li>Белок 2 г/кг</li><li>Углеводы для энергии</li>';
-            else nutritionHTML += '<li>Баланс БЖУ</li><li>Слушай тело</li>';
+            let nutritionHTML = '<h5>Основные принципы:</h5><ul class="list-group list-group-flush">';
+            if (userData.goal === 'loss') {
+                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Дефицит калорий: 500 ккал/день</li>';
+                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Белок: 1.8–2.2 г на кг веса</li>';
+                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Овощи в каждый прием пищи</li>';
+                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Пить 2-3 литра воды в день</li>';
+            } else if (userData.goal === 'gain') {
+                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Профицит калорий: 500 ккал/день</li>';
+                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Белок: 2 г на кг веса</li>';
+                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Сложные углеводы для энергии</li>';
+                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Здоровые жиры: орехи, авокадо</li>';
+            } else {
+                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Поддержание баланса калорий</li>';
+                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Сбалансированное БЖУ</li>';
+                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Регулярное питание 3-5 раз в день</li>';
+                nutritionHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Слушайте сигналы голода</li>';
+            }
             nutritionHTML += '</ul>';
             document.getElementById('nutrition-plan-display').innerHTML = nutritionHTML;
 
+            // Детали питания
+            const protein = Math.round(userData.weight * (userData.goal === 'gain' ? 2 : 1.8));
+            const carbs = Math.round(target * (userData.goal === 'gain' ? 0.5 : 0.4) / 4);
+            const fat = Math.round(target * 0.3 / 9);
+            
+            document.getElementById('nutrition-details').innerHTML = `
+                <h5>Рекомендуемое распределение:</h5>
+                <div class="row text-center">
+                    <div class="col-4">
+                        <div class="display-6 text-accent">${protein}g</div>
+                        <div class="text-muted">Белок</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="display-6 text-accent">${carbs}g</div>
+                        <div class="text-muted">Углеводы</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="display-6 text-accent">${fat}g</div>
+                        <div class="text-muted">Жиры</div>
+                    </div>
+                </div>
+            `;
+
             // Тренировки
-            let workoutHTML = '<ul>';
-            if (userData.goal === 'loss') workoutHTML += '<li>3–4 силовые + кардио</li><li>HIIT 20–30 мин</li>';
-            else if (userData.goal === 'gain') workoutHTML += '<li>4–5 силовых</li><li>База: жим, тяга, присед</li>';
-            else workoutHTML += '<li>3–4 тренировки</li><li>Full-body или сплит</li>';
+            let workoutHTML = '<h5>Рекомендуемая программа:</h5><ul class="list-group list-group-flush">';
+            if (userData.goal === 'loss') {
+                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">3–4 силовые тренировки в неделю</li>';
+                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">20–30 минут кардио после силовой</li>';
+                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">HIIT 2 раза в неделю</li>';
+                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">10,000 шагов ежедневно</li>';
+            } else if (userData.goal === 'gain') {
+                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">4–5 силовых тренировок в неделю</li>';
+                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Акцент на базовые упражнения</li>';
+                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Прогрессия нагрузок</li>';
+                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Менее 30 минут кардио</li>';
+            } else {
+                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">3–4 тренировки в неделю</li>';
+                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Full-body или сплит программа</li>';
+                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Разнообразие упражнений</li>';
+                workoutHTML += '<li class="list-group-item bg-transparent text-light border-secondary">Йога/стрейчинг 1-2 раза в неделю</li>';
+            }
             workoutHTML += '</ul>';
             document.getElementById('workout-plan-display').innerHTML = workoutHTML;
 
+            // Детали тренировок
+            document.getElementById('workout-details').innerHTML = `
+                <h5>Пример тренировочного дня:</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-transparent text-light border-secondary">Разминка: 10 минут</li>
+                    <li class="list-group-item bg-transparent text-light border-secondary">Основные упражнения: 3-4 подхода по 8-12 повторений</li>
+                    <li class="list-group-item bg-transparent text-light border-secondary">Заминка: 5-10 минут</li>
+                </ul>
+            `;
+
+            // Общие рекомендации
+            document.getElementById('nutrition-tips').innerHTML = `
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-transparent text-light border-secondary">Завтрак в течение часа после пробуждения</li>
+                    <li class="list-group-item bg-transparent text-light border-secondary">Белок в каждый прием пищи</li>
+                    <li class="list-group-item bg-transparent text-light border-secondary">Пейте воду перед едой</li>
+                </ul>
+            `;
+
+            document.getElementById('workout-tips').innerHTML = `
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-transparent text-light border-secondary">Концентрируйтесь на технике</li>
+                    <li class="list-group-item bg-transparent text-light border-secondary">Ведите дневник тренировок</li>
+                    <li class="list-group-item bg-transparent text-light border-secondary">Спите 7-9 часов</li>
+                </ul>
+            `;
+
             // График
+            updateChart();
+        }
+
+        function updateChart() {
             const dates = Object.keys(weightHistory).sort().slice(-30);
             const weights = dates.map(d => weightHistory[d]);
 
@@ -348,26 +687,103 @@
             chartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: dates.length ? dates.map(d => d.slice(5)) : ['Сегодня'],
+                    labels: dates.length ? dates.map(d => formatDate(d)) : [formatDate(new Date().toISOString().split('T')[0])],
                     datasets: [{
                         label: 'Вес (кг)',
                         data: weights.length ? weights : [userData.weight],
-                        borderColor: var(--accent),
+                        borderColor: '#00ff88',
                         backgroundColor: 'rgba(0,255,136,0.1)',
+                        borderWidth: 3,
                         tension: 0.4,
-                        fill: true
+                        fill: true,
+                        pointBackgroundColor: '#00ff88',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5
                     }]
                 },
                 options: {
                     responsive: true,
-                    plugins: { legend: { labels: { color: 'white' } } },
-                    scales: { x: { ticks: { color: 'white' } }, y: { ticks: { color: 'white' } } }
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleColor: '#00ff88',
+                            bodyColor: 'white'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: 'white',
+                                maxRotation: 45
+                            },
+                            grid: {
+                                color: 'rgba(255,255,255,0.1)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255,255,255,0.1)'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Вес (кг)',
+                                color: 'white'
+                            }
+                        }
+                    }
                 }
             });
         }
 
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
+        }
+
+        function exportData() {
+            const data = {
+                userData: userData,
+                weightHistory: weightHistory,
+                exportDate: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `FitToMe_data_${new Date().toISOString().split('T')[0]}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            showNotification('Данные успешно экспортированы!');
+        }
+
+        function clearHistory() {
+            if (confirm('Вы уверены, что хотите очистить всю историю веса? Это действие нельзя отменить.')) {
+                weightHistory = {};
+                localStorage.removeItem('weightHistory');
+                updateChart();
+                showNotification('История веса очищена');
+            }
+        }
+
         function logout() {
-            if (confirm('Выйти?')) {
+            if (confirm('Вы уверены, что хотите выйти?')) {
                 localStorage.removeItem('userData');
                 location.reload();
             }
@@ -376,10 +792,17 @@
         // Автологин
         if (localStorage.getItem('userData')) {
             userData = JSON.parse(localStorage.getItem('userData'));
+            weightHistory = JSON.parse(localStorage.getItem('weightHistory')) || {};
             document.getElementById('landing-page').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
             loadDashboard();
         }
+
+        // Инициализация Bootstrap компонентов
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
     </script>
 </body>
 </html>
